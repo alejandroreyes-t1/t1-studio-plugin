@@ -117,6 +117,12 @@ const shapeOf = (typeName) => {
 const isNode = (v) => v && typeof v === 'object' && !Array.isArray(v) && typeof v.c === 'string';
 const isRow = (v) => v && typeof v === 'object' && !Array.isArray(v) && '$row' in v;
 const isAct = (v) => v && typeof v === 'object' && !Array.isArray(v) && '$act' in v;
+// Prototype extensions (SCREENSPEC.md §Prototype extensions): `$state` reads, `$bind` reads+writes,
+// both against the top-level `state` object. Legal on ANY prop — a value-typed one (reads it) or a
+// function-typed one (the preview renderer wires it to write back), same as `$act` is legal on any
+// function-typed prop today.
+const isState = (v) => v && typeof v === 'object' && !Array.isArray(v) && '$state' in v;
+const isBind = (v) => v && typeof v === 'object' && !Array.isArray(v) && '$bind' in v;
 const isFn = (t) => /=>/.test(t);
 const HEX = /#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})\b/i;
 const arrayOf = (t) => {
@@ -167,6 +173,20 @@ const audit = (spec) => {
   const checkTyped = (path, owner, name, type, values, v, ctx) => {
     if (v === undefined || v === null) return;
     if (isRow(v)) { if (ctx.rowMode) add(r.defects.badValue, `${path}: $row fuera de una celda de DataTable`); return; }
+    if (isState(v) || isBind(v)) {
+      const key = isState(v) ? v.$state : v.$bind;
+      const decl = spec.state;
+      if (!decl || !(key in decl)) { add(r.defects.badValue, `${path}: ${isState(v) ? '$state' : '$bind'}.${key} no está declarado en "state" del ScreenSpec`); return; }
+      // $bind can sit on a function-typed prop too (the renderer wires it as the write side) —
+      // only type-check the read side ($state, or $bind against a non-function prop).
+      if (isState(v) && !isFn(type) && type !== 'ReactNode') {
+        const t = typeof decl[key];
+        if (type === 'boolean' && t !== 'boolean') add(r.defects.badValue, `${path}: state.${key} es ${t}; ${owner}.${name} espera boolean`);
+        else if (type === 'number' && t !== 'number') add(r.defects.badValue, `${path}: state.${key} es ${t}; ${owner}.${name} espera number`);
+        else if (type === 'string' && t !== 'string') add(r.defects.badValue, `${path}: state.${key} es ${t}; ${owner}.${name} espera string`);
+      }
+      return;
+    }
     if (isAct(v)) {
       if (!isFn(type) && type !== 'ReactNode') add(r.warnings, `${path}: $act en algo que no es función (${type})`);
       return;

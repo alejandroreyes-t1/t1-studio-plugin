@@ -2,22 +2,35 @@
 
 Marketplace de plugins de Claude Code del equipo de producto de T1. El objetivo: cualquier PO
 puede usar `/studio` en **su propio proyecto** sin clonar ni descargar el kit completo — el plugin
-trae todo lo que necesita (manifiesto de Nexus, criterio UX, validador, editor) instalado una vez
-por máquina.
+trae todo lo que necesita (manifiesto de Nexus, criterio UX, validador, preview interactivo)
+instalado una vez por máquina.
+
+## Origen
+
+La base original de T1 Studio la compartió Guillermo. Alejandro Reyes la adaptó para el
+Laboratorio de Owners y la sigue iterando con base en pruebas reales con owners (incluyendo el
+motor de preview interactivo y la detección SHAPE/BUILD/AUDIT). No es una creación desde cero —
+mantén esta atribución si reescribes esta sección.
 
 ## Qué contiene
 
 ### Plugin `studio` (`plugins/studio/`)
 
-La skill `studio` (T1 Studio): un PO describe una pantalla en lenguaje natural, la skill la
-compone solo con componentes reales de Nexus, la valida mecánicamente contra el manifiesto, deja
-iterar por chat, da crítica de diseño y cierra con un reporte de handoff.
+La skill `studio` (T1 Studio): un PO describe una necesidad — desde una idea suelta hasta un
+documento de definición ya maduro (con IDs, reglas, estados, casos) — y la skill entrega un
+**prototipo React interactivo real** (no solo un JSON) compuesto con componentes reales de Nexus,
+validado mecánicamente contra el manifiesto, navegable con `http://localhost:<puerto>`, editable
+por chat, con crítica de diseño y reporte de handoff trazable a los IDs del documento fuente.
 
-Todo lo de solo-lectura (manifiesto, `SCREENSPEC.md`, criterios UX, validador, editor
-`studio.html`) vive empaquetado dentro del plugin, en
-`plugins/studio/skills/studio/kit/`. La skill nunca escribe ahí — cada PO genera sus pantallas y
-reportes en `./t1-studio-output/` dentro de su propio proyecto, así cada quien versiona lo suyo
-donde ya trabaja.
+Detecta internamente si el input es difuso (**SHAPE**: reencuadre + máx. 3 preguntas) o ya viene
+maduro (**BUILD**: no reinterroga lo que el documento ya responde, solo pregunta lo bloqueante), y
+puede auditar un documento en busca de contradicciones/huecos (**AUDIT**) sin construir nada.
+
+Todo lo de solo-lectura (manifiesto, `SCREENSPEC.md`, criterios UX, validador, motor de preview en
+`preview-runtime/`) vive empaquetado dentro del plugin, en `plugins/studio/skills/studio/kit/`. La
+skill nunca escribe ahí — cada PO genera sus pantallas, reportes y su servidor de preview local en
+`./t1-studio-output/` dentro de su propio proyecto, así cada quien versiona lo suyo donde ya
+trabaja.
 
 ## Uso
 

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>T1 Studio — vista previa</title>
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+<div class="t1-devbar" id="t1-devbar"></div>
+<div id="t1-root"></div>
+
+<script src="/vendor/react.production.min.js"></script>
+<script src="/vendor/react-dom.production.min.js"></script>
+<script id="t1-studio-data" type="application/json">__T1_STUDIO_DATA__</script>
+<script src="/renderer.js"></script>
+<script>
+(function () {
+  var data = JSON.parse(document.getElementById('t1-studio-data').textContent);
+  window.T1StudioPreview.mount(data.screens, data.initialSlug);
+
+  // Minimal live-reload: poll a version signature (hash of pantallas/*.json mtimes+sizes) and
+  // reload the page when it changes, so "Muéstramelo" after an /studio iterate just updates.
+  var lastVersion = data.version;
+  var bar = document.getElementById('t1-devbar');
+  function poll() {
+    fetch('/api/version')
+      .then(function (r) { return r.json(); })
+      .then(function (v) {
+        if (v.version !== lastVersion) {
+          bar.className = 't1-devbar reloading';
+          location.reload();
+        }
+      })
+      .catch(function () {})
+      .then(function () { setTimeout(poll, 1500); });
+  }
+  setTimeout(poll, 1500);
+})();
+</script>
+</body>
+</html>

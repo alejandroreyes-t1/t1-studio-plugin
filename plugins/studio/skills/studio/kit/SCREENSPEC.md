@@ -127,3 +127,61 @@ props or children.
 `validar.mjs` enforces rules 1–2 as *defectos de conformidad* and rules 4 and 6 as *reglas de
 contenido*; both fail the run. Rules 3 and 5 are judgment — the auditor prompt checks them. The
 validator cannot see arithmetic, copy, or whether a statistic is invented.
+
+## Prototype extensions (interactive preview only)
+
+These extend the format above to drive the live, interactive preview (`preview-server.mjs` +
+`preview-runtime/`). They do not change rules 1–6 above and `validar.mjs` still enforces every one
+of them exactly as before — a screen using these extensions must still be built ONLY from real
+Nexus components with real props. Nothing here is a new component or a way around the manifest.
+
+```jsonc
+{
+  "screen": "string",
+  "state": { "key": /* primitive */ initialValue, … },   // NEW, optional
+  "shell": { "kind": "app" | "none", … } | undefined,     // NEW, optional
+  "root": Node
+}
+```
+
+**`state`** — a flat object of primitive initial values (string/number/boolean), local to this one
+prototype. Every key used by `$state`/`$bind` below must be declared here — the validator checks
+this and fails the run if it isn't (same severity as any other `valor ilegal`).
+
+**`{ "$state": "key" }`** as a Value — reads `state.key`. Read-only; legal anywhere a Value is
+legal, same as `$row`.
+
+**`{ "$bind": "key" }`** — two-way. Put it on a component's controlled-value prop (`value`,
+`checked`, `activeId`, `open`, `page`…) to read `state.key`, AND on that same component's paired
+change-handler prop (`onChange`, `onCheckedChange`, `onSelect`, `onClose`, `onPageChange`…) to
+write to it — the renderer's own implementation of that component decides how the real callback's
+argument becomes the stored value. Both props are still validated exactly as their real manifest
+types require (a function-typed prop only accepts `$act` or `$bind`, never a literal).
+
+```jsonc
+{ "c": "Input", "p": { "label": "Buscar", "value": { "$bind": "search" }, "onChange": { "$bind": "search" } } }
+```
+
+**`{ "$act": "id", "effect": {...} }`** — `effect` is a new OPTIONAL field on the existing `$act`
+placeholder. A bare `{ "$act": "id" }` is still exactly what it always was (a no-op in the POC
+renderer) — existing screens keep working unchanged. `effect.op` is one of:
+
+| op | fields | does |
+| --- | --- | --- |
+| `set` | `key`, `value` | `state.key = value` |
+| `toggle` | `key` | flips a boolean |
+| `increment` / `decrement` | `key`, `by?` (default 1) | adds/subtracts from a number |
+| `navigate` | `to` (a screen slug) | switches which screen of the prototype is showing |
+
+**`shell`** (top-level, sibling of `root`) — PREVIEW-ONLY chrome (a sidebar + nav rail), rendered
+by `preview-runtime/renderer.js`'s `PreviewShell`, never by Nexus. It is NEVER validated, NEVER
+counted as a "componente Nexus utilizado" in the handoff report, and never something `validar.mjs`
+even looks at. `{ "kind": "none" }` (or omitting `shell`) renders the screen alone, exactly like
+before. Before reaching for `shell`, check whether Nexus actually has a real
+Sidebar/AppShell/navigation component (`nexus-contract/inventory.json`) — if it does, compose the
+screen with that instead and skip `shell` entirely; today it doesn't, so `shell.kind: "app"` is the
+fallback, clearly labeled in the preview UI as not-Nexus.
+
+```jsonc
+{ "kind": "app", "title": "T1 Operaciones", "nav": [ { "label": "Devoluciones", "to": "devoluciones" }, { "label": "Conciliación", "to": "conciliacion" } ] }
+```
