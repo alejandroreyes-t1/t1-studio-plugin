@@ -115,6 +115,7 @@ const server = createServer((req, res) => {
     return res.end(JSON.stringify({ version: versionHash() }));
   }
   if (url.pathname === '/styles.css') return sendFile(res, join(RUNTIME_DIR, 'styles.css'), MIME['.css']);
+  if (url.pathname === '/nexus-tokens.css') return sendFile(res, join(RUNTIME_DIR, 'nexus-tokens.css'), MIME['.css']);
   if (url.pathname === '/renderer.js') return sendFile(res, join(RUNTIME_DIR, 'renderer.js'), MIME['.js']);
   if (url.pathname.startsWith('/vendor/')) {
     const file = join(RUNTIME_DIR, 'vendor', basename(url.pathname));

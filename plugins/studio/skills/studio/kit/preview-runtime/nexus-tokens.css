@@ -1,0 +1,406 @@
+/* ============================================================
+   Nexus (T1) — Color tokens
+   Source of truth: documentation/canon/foundation/COLORS.md (NEXUS V2.0)
+   Three layers: base scales → semantic roles → platform aliases.
+   500 is the base of every scale. Oxford (#4C4C4C) is the platform text color.
+   ============================================================ */
+
+:root {
+  /* ── Base / brand neutrals ─────────────────────────────── */
+  --t1-white: #FFFFFF;
+  --t1-oxford: #4C4C4C;   /* primary text across the whole platform */
+  --t1-black: #000000;
+  --t1-ink: #171717;      /* live landing default ink (rgb 23,23,23) */
+
+  /* ── Brand Red (flagship) ──────────────────────────────── */
+  --t1-red-50:  #FEF4F4;
+  --t1-red-100: #F9D2D2;
+  --t1-red-200: #F1B0A9;
+  --t1-red-300: #E9897E;
+  --t1-red-400: #E26153;  /* LANDING primary button + title accents */
+  --t1-red-500: #DB3B2B;  /* DASHBOARD primary button + admin CTAs (base) */
+  --t1-red-600: #DB362B;  /* dashboard button hover (dark variant) */
+  --t1-red-700: #CC0000;  /* destructive / error / deletions */
+  /* decorative landing pinks */
+  --t1-pink-glow: #E59086;
+  --t1-pink-soft: #F2B5AE;
+  --t1-card-title: #0A2540; /* landing lifestyle segment-card titles */
+
+  /* ── Gray scale ────────────────────────────────────────── */
+  --t1-gray-50:  #F8F8F8;
+  --t1-gray-100: #F3F3F3;
+  --t1-gray-200: #E7E7E7;
+  --t1-gray-300: #DBDBDB;
+  --t1-gray-400: #CFCFCF;
+  --t1-gray-500: #C3C3C3;
+  --t1-gray-600: #9CA3AF;
+  --t1-gray-700: #6B7280;
+  --t1-gray-800: #4B5563;
+  --t1-gray-900: #1F2937;
+
+  /* ── Semantic — Green / Success ────────────────────────── */
+  --t1-green-100: #F0FDF4;
+  --t1-green-300: #6FCF97;
+  --t1-green-500: #4FC153;
+  --t1-green-700: #16A34A;
+  --t1-green-900: #14532D;
+
+  /* ── Semantic — Orange / Warning ───────────────────────── */
+  --t1-orange-100: #FFF0E5;
+  --t1-orange-300: #FFB380;
+  --t1-orange-500: #FF6700;
+  --t1-orange-700: #CC5200;
+  --t1-orange-900: #8A3600;
+
+  /* ── Semantic — Yellow / Caution · Premium ─────────────── */
+  --t1-yellow-100: #FFF4BF;
+  --t1-yellow-300: #FEF08A;
+  --t1-yellow-500: #EDBD55;
+  --t1-yellow-700: #A96A00;
+  --t1-yellow-900: #713F12;
+
+  /* ── Semantic — Blue / Info · Links ────────────────────── */
+  --t1-blue-100: #F0F8FF;
+  --t1-blue-300: #7DB3FF;
+  --t1-blue-500: #2180FF;
+  --t1-blue-700: #005EDC;
+  --t1-blue-900: #0F3D7A;
+
+  /* ── Extended — Brown · Gold / Premium ─────────────────── */
+  --t1-brown-100: #FAF8F3;
+  --t1-brown-300: #F0E6B8;
+  --t1-brown-500: #976905;
+  --t1-brown-700: #6B4A04;
+  --t1-brown-900: #4A3202;
+
+  /* ── Extended — Purple / AI · Advanced ─────────────────── */
+  --t1-purple-100: #FAF7FF;
+  --t1-purple-300: #D0B3FF;
+  --t1-purple-500: #A064FF;
+  --t1-purple-700: #6537AE;
+  --t1-purple-900: #3C1361;
+
+  /* ── Extended — Turquoise / Reports · Data ─────────────── */
+  --t1-turquoise-100: #F0FDFA;
+  --t1-turquoise-300: #ADFFDC;
+  --t1-turquoise-500: #52F5B0;
+  --t1-turquoise-700: #0F766E;
+  --t1-turquoise-900: #134E4A;
+
+  /* ── Overlays ──────────────────────────────────────────── */
+  --t1-overlay-modal:  rgba(0,0,0,0.6);
+  --t1-overlay-black10: rgba(0,0,0,0.1);
+  --t1-overlay-red10:  rgba(254,77,97,0.1);
+  --t1-overlay-blue10: rgba(33,128,255,0.1);
+  --t1-overlay-green10: rgba(81,175,112,0.1);
+  --t1-overlay-purple10: rgba(173,124,250,0.1);
+
+  /* =========================================================
+     Semantic roles (meaning, not value)
+     ========================================================= */
+  --color-text:        var(--t1-oxford);   /* body copy */
+  --color-text-strong: var(--t1-gray-900); /* headings, emphatic labels */
+  --color-text-muted:  var(--t1-gray-700); /* secondary text, descriptions */
+  --color-text-subtle: var(--t1-gray-600); /* placeholders, disabled, eyebrow */
+  --color-text-inverse: var(--t1-white);
+  --color-link:        var(--t1-blue-500); /* dashboard links */
+
+  --color-success: var(--t1-green-500);
+  --color-success-bg: var(--t1-green-100);
+  --color-warning: var(--t1-orange-500);
+  --color-warning-bg: var(--t1-orange-100);
+  --color-caution: var(--t1-yellow-500);
+  --color-caution-bg: var(--t1-yellow-100);
+  --color-error:   var(--t1-red-700);
+  --color-error-bg: var(--t1-red-50);
+  --color-info:    var(--t1-blue-500);
+  --color-info-bg: var(--t1-blue-100);
+  --color-premium: var(--t1-yellow-500);
+  --color-ai:      var(--t1-purple-500);
+
+  --color-border:  #D9D9D9;          /* default input border / dividers */
+  --color-border-hover: #A3A3A3;
+  --color-disabled-text: #A3A3A3;
+  --color-disabled-bg:   #F2F2F2;
+
+  /* =========================================================
+     Platform aliases — DASHBOARD (admin / backoffice)
+     ========================================================= */
+  --dash-primary:        var(--t1-red-500);  /* #DB3B2B */
+  --dash-primary-hover:  var(--t1-red-700);  /* #CC0000 */
+  --dash-page-bg:        var(--t1-gray-50);  /* #F8F8F8 */
+  --dash-surface:        var(--t1-white);
+  --dash-table-header:   #F4F8FF;
+  --dash-row-hover:      var(--t1-gray-50);
+
+  /* =========================================================
+     Theme vocabulary defaults — the abstract token contract
+     (src/tokens.ts REQUIRED_TOKEN_KEYS) that the nexus-react /
+     nexus-native components consume (var(--color-primary),
+     var(--color-bg), …). These are the THEME tier: the default
+     surface here is the DASHBOARD/admin, and an app or tenant
+     theme provider may override any of them at its own :root
+     (e.g. Cortex/Compass → coral, storefront → per-tenant).
+     Without this binding the components fell back to the neutral
+     dark DEFAULT_TOKENS literals baked into the primitives — the
+     primary <Button> rendered near-black instead of the brand red
+     (the residual-styling / unwired-pipeline gap). Filling
+     --color-primary makes both the primary (red fill) and the
+     secondary (red outline) variants brand-correct in one place. */
+  --color-primary:       var(--dash-primary);  /* #DB3B2B dashboard CTA red / legacy admin */
+  --color-bg:            var(--t1-white);       /* #FFFFFF on-primary label + page surface */
+
+  /* =========================================================
+     Platform aliases — LANDING (public marketing)
+     ========================================================= */
+  --land-primary:        var(--t1-red-400);  /* #E26153 */
+  --land-primary-hover:  #D55244;
+  --land-ink:            var(--t1-ink);      /* #171717 */
+  --land-surface-warm:   #FFFAFA;            /* warm near-white wash */
+  --land-dark:           var(--t1-black);    /* pure-black dark sections */
+}
+/* ============================================================
+   Nexus (T1) — Elevation tokens (shadows, radius, z-index)
+   Source: foundation/ELEVATION.md + platform/DASHBOARD.md + landing-tokens.ts
+   Dashboard cards are FLAT; landing cards use soft, diffuse shadows.
+   ============================================================ */
+
+:root {
+  /* ── Border radius — Dashboard ─────────────────────────── */
+  --radius-dash-sidebar: 18px;  /* sidebar / panels */
+  --radius-dash-lg:      20px;  /* large cards */
+  --radius-dash-md:      13px;  /* medium cards */
+  --radius-dash:         10px;  /* cards, modals */
+  --radius-dash-control: 8px;   /* inputs, buttons */
+  --radius-dash-badge:   4px;   /* badges, tags */
+
+  /* ── Border radius — Landing ───────────────────────────── */
+  --radius-land-cta:    32px;   /* final CTA dark card */
+  --radius-land-card:   24px;   /* all landing cards / browser mockup */
+  --radius-land-button: 18px;   /* primary + secondary buttons / inputs */
+  --radius-land-icon:   14px;   /* 52×52 icon containers */
+  --radius-land-phone:  32px;   /* phone mockup */
+
+  /* ── Shadows — Dashboard (only 3) ──────────────────────── */
+  --shadow-dash-card:     0px 0px 5px 1px rgba(0,0,0,0.1);
+  --shadow-dash-dropdown: 0px 4px 8px rgba(0,0,0,0.12);
+  --shadow-dash-sidebar:  2px 0px 8px rgba(0,0,0,0.08);
+  --shadow-dash-button:   0 0 4px 0 rgba(0,0,0,0.14);
+  --shadow-dash-selected: 0 0 4.5px 0.9px #F1B0A9;
+
+  /* ── Shadows — Landing (soft, diffuse) ─────────────────── */
+  --shadow-land-card:       0 0 25px 2px rgba(0,0,0,0.06);
+  --shadow-land-card-hover: 0 20px 50px rgba(0,0,0,0.08);
+  --shadow-land-badge:      0 12px 40px rgba(0,0,0,0.1);
+  --shadow-land-mockup:     0 25px 80px -15px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.04);
+  --shadow-land-phone:      0 20px 60px rgba(0,0,0,0.15);
+  --shadow-land-header:     0 0 25px 2px rgba(0,0,0,0.06);
+
+  /* ── Glass / decoration (landing) ──────────────────────── */
+  --glass-header: rgba(255,255,255,0.51); /* @kind color */ /* live oracle; pair with blur */
+  --gradient-hero: linear-gradient(180deg, #FFFAFA 0%, #FFFFFF 60%, #FFFFFF 100%); /* @kind color */
+  --gradient-cta:  linear-gradient(to bottom right, #E59086, #F2B5AE); /* @kind color */
+  --glow-card:     rgba(226,97,83,0.08); /* @kind color */
+
+  /* ── Z-index scale ─────────────────────────────────────── */
+  --z-base: 0;        /* @kind other */
+  --z-elevated: 10;   /* @kind other */
+  --z-sticky: 20;     /* @kind other */
+  --z-sidebar: 30;    /* @kind other */
+  --z-dropdown: 40;   /* @kind other */
+  --z-header: 50;     /* @kind other */
+  --z-modal: 60;      /* @kind other */
+  --z-toast: 70;      /* @kind other */
+  --z-tooltip: 80;    /* @kind other */
+  --z-overlay: 90;    /* @kind other */
+  --z-max: 100;       /* @kind other */
+
+  /* ── Motion ────────────────────────────────────────────── */
+  --ease-standard: ease; /* @kind other */
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */
+  --dur-fast: 150ms;   /* @kind other */
+  --dur-base: 300ms;   /* @kind other */
+  --dur-slow: 500ms;   /* @kind other */
+  --dur-scroll: 700ms; /* @kind other */
+}
+/* ============================================================
+   Nexus (T1) — Spacing & layout tokens
+   Source: foundation/SPACING.md + foundation/LAYOUT.md
+   Base unit = 4px. Names reflect the multiplier (space-8 = 8×4 = 32px).
+   ============================================================ */
+
+:root {
+  /* ── Base scale (multiples of 4px) ─────────────────────── */
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* ── Semantic aliases (2xs–4xl) ────────────────────────── */
+  --space-2xs: var(--space-1);   /* 4  */
+  --space-xs:  var(--space-2);   /* 8  */
+  --space-sm:  var(--space-3);   /* 12 */
+  --space-md:  var(--space-4);   /* 16 */
+  --space-lg:  var(--space-5);   /* 20 */
+  --space-xl:  var(--space-6);   /* 24 */
+  --space-2xl: var(--space-8);   /* 32 */
+  --space-3xl: var(--space-10);  /* 40 */
+  --space-4xl: var(--space-12);  /* 48 */
+
+  /* ── Layout tokens ─────────────────────────────────────── */
+  --content-gap:    28px;   /* dashboard block gap */
+  --sidebar-width:  284px;  /* dashboard expanded sidebar */
+  --header-height:  64px;   /* dashboard top bar */
+
+  /* Containers */
+  --container-dashboard: 1600px; /* @kind spacing */
+  --container-landing:   1080px; /* @kind spacing */ /* live oracle (canon doc says 1018) */
+  --container-landing-wide:   1280px; /* @kind spacing */
+  --container-landing-narrow: 721px;  /* @kind spacing */
+  --container-screenshot:     850px;  /* @kind spacing */
+
+  /* ── Breakpoints (reference) ───────────────────────────── */
+  --bp-mobile:  360px;  /* @kind spacing */
+  --bp-tablet:  768px;  /* @kind spacing */
+  --bp-desktop: 1280px; /* @kind spacing */
+  --bp-wide:    1920px; /* @kind spacing */
+}
+/* ============================================================
+   Nexus (T1) — Typography tokens
+   Source: foundation/TYPOGRAPHY.md + platform/DASHBOARD.md + landing-tokens.ts
+   Dashboard = Manrope only.  Landing = Sora headings + Inter body
+   (live t1.com/mx pins body to Manrope per ADR-004 — see --lp-font-body).
+   Families never mix across contexts.
+   ============================================================ */
+
+:root {
+  /* ── Families ──────────────────────────────────────────── */
+  --font-manrope: 'Manrope', system-ui, sans-serif;
+  --font-sora:    'Sora', system-ui, sans-serif;
+  --font-inter:   'Inter', system-ui, sans-serif;
+
+  /* Semantic family aliases */
+  --font-dashboard: var(--font-manrope);              /* all dashboard text */
+  --font-heading:   var(--font-sora);                 /* landing headings */
+  --font-body:      var(--font-inter);                /* landing body (canon) */
+
+  /* ── Line-heights (per family) ─────────────────────────── */
+  --lh-manrope: 1.366; /* @kind font */
+  --lh-sora:    1.2;   /* @kind font */
+  --lh-inter:   1.5;   /* @kind font */
+
+  /* ── Weights ───────────────────────────────────────────── */
+  --fw-light: 300;    /* @kind font */
+  --fw-regular: 400;  /* @kind font */
+  --fw-medium: 500;   /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold: 700;     /* @kind font */
+
+  /* ── Dashboard scale (Manrope, lh 1.366) ───────────────── */
+  --text-display-2xl: 72px;  /* Bold 700 — landing-only in practice */
+  --text-display-xl:  60px;  /* Bold 700 */
+  --text-display-lg:  48px;  /* Bold 700 — page titles */
+  --text-medium-lg:   36px;  /* SemiBold 600 — prominent subtitles */
+  --text-semi-md:     28px;  /* SemiBold 600 — section headings */
+  --text-title-base:  24px;  /* SemiBold/Bold — card titles */
+  --text-lg:          20px;  /* content — variable weight */
+  --text-md:          16px;  /* content / body */
+  --text-sm:          14px;  /* primary body, inputs, labels */
+  --text-micro:       12px;  /* captions, badges, helper */
+
+  /* ── Landing scale (Sora headings desktop sizes) ───────── */
+  --land-h0: 54px;  /* Display — Sora Light 300 */
+  --land-h1: 40px;  /* Section title — Sora Regular 400 */
+  --land-h2: 44px;  /* Canonical section h2 (32px mobile) */
+  --land-h3: 24px;  /* Card heading */
+  --land-h4: 20px;  /* Small heading */
+  --land-body: 16px;
+  --land-eyebrow: 11px; /* Inter SemiBold, uppercase, 0.15em tracking */
+}
+/* ============================================================
+   Nexus (T1) — Webfonts
+   Dashboard = Manrope.  Landing = Sora (headings) + Inter / Manrope (body).
+   Per ADR-004 the live t1.com/mx pins body to Manrope; Inter remains the
+   canonical landing body family and ships here for canon-faithful work.
+   Loaded from Google Fonts so a consumer who links styles.css gets them.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+/* ============================================================
+   Nexus (T1) Design System — global entry point
+   Consumers link THIS file. It is an @import manifest only.
+   Source repo: PlataformaT1/Phoenix — libs/shared/nexus
+   ============================================================ */
+
+/* NOTE: in this lib distribution the layer files are FLAT in css/ (not under tokens/, as in the
+   self-contained skill bundle) — so these imports are sibling files, not ./tokens/*. */
+@import url('./fonts.css');
+@import url('./colors.css');
+@import url('./typography.css');
+@import url('./spacing.css');
+@import url('./elevation.css');
+@import url('./landing.css');
+/* ============================================================
+   Nexus (T1) — Landing tokens (--lp-*)
+   Mirror of l3-nexus-tokens/src/landing-tokens.ts — pinned to the LIVE
+   t1.com/mx oracle (ADR-004: pixel-parity over visual canon).
+   Headings = Sora, body = Manrope; coral #E26153; warm #FFFAFA wash;
+   pure-black dark sections. The --lp-* prefix never collides with the
+   generic theme tokens; a tenant/locale may override any key at :root.
+   ============================================================ */
+
+:root {
+  /* Typography — live: headings Sora, body Manrope */
+  --lp-font-heading: 'Sora', system-ui, sans-serif;
+  --lp-font-body: 'Manrope', system-ui, sans-serif;
+
+  /* Color */
+  --lp-color-accent: #E26153;
+  --lp-color-accent-hover: #D55244;
+  --lp-color-oxford: #4C4C4C;
+  --lp-color-ink: #171717;
+  --lp-color-ink-card-title: #0A2540;
+  --lp-color-white: #FFFFFF;
+  --lp-color-black: #000000;
+  --lp-color-border: #E5E7EB;
+  --lp-color-surface-alt: #FFFAFA;
+  --lp-color-dark: #000000;
+  --lp-color-red-50: #FEF4F4;
+
+  /* Radius */
+  --lp-radius-card: 24px;
+  --lp-radius-button: 18px;
+  --lp-radius-mockup: 16px;
+  --lp-radius-phone: 32px;
+  --lp-radius-badge: 16px;
+
+  /* Sizing */
+  --lp-button-height: 45px;
+  --lp-container-main: 1080px;
+  --lp-container-wide: 1280px;
+  --lp-container-narrow: 721px;
+  --lp-container-screenshot: 850px;
+
+  /* Shadows */
+  --lp-shadow-card: 0 0 25px 2px rgba(0,0,0,0.06);
+  --lp-shadow-card-hover: 0 20px 50px rgba(0,0,0,0.08);
+  --lp-shadow-mockup: 0 25px 80px -15px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.04);
+  --lp-shadow-phone: 0 20px 60px rgba(0,0,0,0.15);
+  --lp-shadow-badge: 0 12px 40px rgba(0,0,0,0.1);
+  --lp-shadow-header: 0 20px 60px rgba(0,0,0,0.1);
+
+  /* Backgrounds & decoration */
+  --lp-gradient-hero: linear-gradient(180deg, #FFFAFA 0%, #FFFFFF 60%, #FFFFFF 100%); /* @kind color */
+  --lp-gradient-mesh: #000000;
+  --lp-glass-header: rgba(255,255,255,0.51);
+}

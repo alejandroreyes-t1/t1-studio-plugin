@@ -1,34 +1,33 @@
 // T1 Studio — preview renderer.
 //
 // Plain JS, no JSX, no bundler: React.createElement directly (React/ReactDOM are vendored as
-// global UMD builds — see index.html). Turns a validated ScreenSpec tree into a visually
-// reasonable, INTERACTIVE approximation of the real Nexus components. This is a preview, not the
-// production design system: fidelity is "clear enough to test the idea", not pixel-perfect. Prop
-// names below are taken from nexus-contract/manifest.generated.json — keep them in sync with it,
-// not with what "seems natural".
+// global UMD builds — see index.html). Renders a validated ScreenSpec tree using the REAL Nexus
+// components, compiled offline from Phoenix into `vendor/nexus-react.bundle.js` (see
+// scripts/build-nexus-vendor.sh) and exposed as `window.NexusReact`. Prop names below are taken
+// straight from nexus-contract/manifest.generated.json, which was extracted from these same real
+// components — keep them in sync, not with what "seems natural".
 //
 // Extensions beyond the ScreenSpec documented in SCREENSPEC.md (see "Prototype extensions"):
 //   - top-level `state`: flat object of primitive initial values, local to this prototype.
 //   - `{ "$state": "key" }` anywhere a Value is expected — reads state.key (read-only).
 //   - `{ "$bind": "key" }` on a component's controlled-value prop AND its paired change-handler
 //     prop (same key on both) — the renderer wires the read and the write side. On the
-//     handler prop, the component's OWN implementation below decides how the real Nexus
-//     callback's argument becomes the stored value (e.g. Input.onChange gets a string already;
-//     Dialog.onClose takes no argument and always writes `false`).
-//   - `{ "$act": "id", "effect": {...} }` — effect is optional; a bare `{ "$act": "id" }` stays a
-//     no-op exactly like before, for backward compatibility with existing screen files.
+//     handler prop, the component's OWN adapter below decides how the real Nexus callback's
+//     argument becomes the stored value (e.g. Input.onChange gets a string already; Dialog.onClose
+//     takes no argument and always writes `false`).
+//   - `{ "$act": "id", "effect": {...} }` — effect is one op object, or an array of them applied in
+//     order. A bare `{ "$act": "id" }` stays a no-op, for backward compatibility.
 //   - top-level `shell` — preview-only chrome (sidebar/nav). Never a Nexus node, never validated,
 //     never counted as a "componente Nexus utilizado".
 'use strict';
 
 const h = React.createElement;
+const N = window.NexusReact || {};
 
 // ---------------------------------------------------------------------------------------------
 // Effects
 // ---------------------------------------------------------------------------------------------
 
-// `effect` is one op object, OR an array of them applied in order (e.g. "go to checkout AND
-// remember which plan" is two ops from one click) — see SCREENSPEC.md §Prototype extensions.
 function applyEffect(effect, setState, setActiveScreen) {
   if (!effect) return;
   const ops = Array.isArray(effect) ? effect : [effect];
@@ -115,7 +114,7 @@ function handlerOf(node, name, ctx, mapArgToValue) {
 }
 
 // ---------------------------------------------------------------------------------------------
-// Layout primitive (unchanged contract)
+// Layout primitive + Escape (ours — never Nexus)
 // ---------------------------------------------------------------------------------------------
 
 function renderBox(node, ctx) {
@@ -148,309 +147,165 @@ function renderEscape(node, ctx) {
 }
 
 // ---------------------------------------------------------------------------------------------
-// Nexus-approximation components — one entry per component this renderer hand-implements.
-// Anything not listed here falls through to renderGenericKnown (still real, just lower preview
-// fidelity — never silently treated as an Escape).
+// Real-Nexus adapters — only for components with a two-way $bind pair or deferred/lazy content.
+// Everything else goes through the generic passthrough in renderNode (real props resolve 1:1,
+// since the manifest was extracted FROM these same components).
 // ---------------------------------------------------------------------------------------------
 
-const BADGE_TONE_ALIAS = { error: 'danger', caution: 'warning' };
-const toneClass = (tone) => `n-tone-${BADGE_TONE_ALIAS[tone] || tone || 'neutral'}`;
+const ADAPTERS = {
+  Input: (node, ctx) =>
+    h(N.Input, {
+      label: prop(node, 'label', ctx),
+      placeholder: prop(node, 'placeholder', ctx),
+      helper: prop(node, 'helper', ctx),
+      type: prop(node, 'type', ctx),
+      state: prop(node, 'state', ctx),
+      disabled: !!prop(node, 'disabled', ctx),
+      readOnly: !!prop(node, 'readOnly', ctx),
+      id: prop(node, 'id', ctx),
+      leftIcon: prop(node, 'leftIcon', ctx),
+      value: valueOf(node, 'value', ctx, ''),
+      onChange: handlerOf(node, 'onChange', ctx, (v) => v) || (() => {}),
+    }),
 
-// Real React function component — the only renderer here that needs its own local hook, so it's
-// the only one mounted via createElement instead of called as a plain function. One instance per
-// RowActionsMenu node in the tree; React's own reconciliation keeps each one's `open` state
-// independent (keyed by position in the tree, same as any other list of React elements).
-function RowActionsMenuImpl({ node, ctx }) {
-  const [open, setOpen] = React.useState(false);
-  const items = prop(node, 'items', ctx, []) || [];
-  return h(
-    'span',
-    { className: 'n-row-actions-menu' },
-    h('button', { className: 'n-icon-button', title: prop(node, 'label', ctx, 'Más acciones'), onClick: () => setOpen((v) => !v) }, '⋯'),
-    open &&
-      h(
-        'div',
-        { className: 'n-menu' },
-        items.map((it, i) =>
-          h(
-            'button',
-            {
-              key: i,
-              disabled: !!it.disabled,
-              onClick: () => {
-                setOpen(false);
-                if (typeof it.onSelect === 'function') it.onSelect();
-              },
-            },
-            it.label
-          )
-        )
-      )
-  );
-}
+  Textarea: (node, ctx) =>
+    h(N.Textarea, {
+      label: prop(node, 'label', ctx),
+      placeholder: prop(node, 'placeholder', ctx),
+      helper: prop(node, 'helper', ctx),
+      rows: prop(node, 'rows', ctx),
+      state: prop(node, 'state', ctx),
+      disabled: !!prop(node, 'disabled', ctx),
+      readOnly: !!prop(node, 'readOnly', ctx),
+      id: prop(node, 'id', ctx),
+      value: valueOf(node, 'value', ctx, ''),
+      onChange: handlerOf(node, 'onChange', ctx, (v) => v) || (() => {}),
+    }),
 
-const COMPONENTS = {
-  AnnouncementBar: (node, ctx) => h('div', { className: 'n-announcement' }, prop(node, 'text', ctx, '')),
+  Select: (node, ctx) =>
+    h(N.Select, {
+      label: prop(node, 'label', ctx),
+      placeholder: prop(node, 'placeholder', ctx),
+      disabled: !!prop(node, 'disabled', ctx),
+      id: prop(node, 'id', ctx),
+      options: prop(node, 'options', ctx, []) || [],
+      value: valueOf(node, 'value', ctx, ''),
+      onChange: handlerOf(node, 'onChange', ctx, (v) => v) || (() => {}),
+    }),
 
-  PageHeader: (node, ctx) =>
+  Checkbox: (node, ctx) =>
+    h(N.Checkbox, {
+      label: prop(node, 'label', ctx),
+      disabled: !!prop(node, 'disabled', ctx),
+      indeterminate: prop(node, 'indeterminate', ctx),
+      id: prop(node, 'id', ctx),
+      checked: !!valueOf(node, 'checked', ctx, false),
+      onCheckedChange: handlerOf(node, 'onCheckedChange', ctx, (v) => v) || (() => {}),
+    }),
+
+  Switch: (node, ctx) =>
+    h(N.Switch, {
+      label: prop(node, 'label', ctx),
+      ariaLabel: prop(node, 'ariaLabel', ctx),
+      disabled: !!prop(node, 'disabled', ctx),
+      checked: !!valueOf(node, 'checked', ctx, false),
+      onCheckedChange: handlerOf(node, 'onCheckedChange', ctx, (v) => v) || (() => {}),
+    }),
+
+  Pagination: (node, ctx) =>
+    h(N.Pagination, {
+      label: prop(node, 'label', ctx),
+      siblingWindow: prop(node, 'siblingWindow', ctx),
+      hrefForPage: prop(node, 'hrefForPage', ctx),
+      pageCount: prop(node, 'pageCount', ctx, 1),
+      page: valueOf(node, 'page', ctx, 1),
+      onPageChange: handlerOf(node, 'onPageChange', ctx, (n) => n),
+    }),
+
+  Dialog: (node, ctx) =>
     h(
-      'div',
-      { className: 'n-page-header' },
-      h('h1', null, prop(node, 'title', ctx, '')),
-      prop(node, 'description', ctx) ? h('p', null, prop(node, 'description', ctx)) : null,
-      prop(node, 'action', ctx) ? h('div', { className: 'n-actions' }, prop(node, 'action', ctx)) : null
-    ),
-
-  Button: (node, ctx) => {
-    const variant = prop(node, 'variant', ctx, 'secondary');
-    return h(
-      'button',
-      { className: `n-button n-button-${variant}`, onClick: prop(node, 'onClick', ctx), disabled: !!prop(node, 'disabled', ctx) },
+      N.Dialog,
+      {
+        title: prop(node, 'title', ctx),
+        closeLabel: prop(node, 'closeLabel', ctx),
+        footer: prop(node, 'footer', ctx),
+        variant: prop(node, 'variant', ctx),
+        open: !!valueOf(node, 'open', ctx, false),
+        onClose: handlerOf(node, 'onClose', ctx, () => false) || (() => {}),
+      },
       resolveChildren(node.ch, ctx)
-    );
-  },
-
-  IconButton: (node, ctx) =>
-    h(
-      'button',
-      { className: 'n-icon-button', onClick: prop(node, 'onClick', ctx), disabled: !!prop(node, 'disabled', ctx), title: prop(node, 'label', ctx) },
-      resolveChildren(node.ch, ctx) || '•'
     ),
 
-  Badge: (node, ctx) => h('span', { className: `n-badge ${toneClass(prop(node, 'tone', ctx))}` }, resolveChildren(node.ch, ctx)),
-  Tag: (node, ctx) =>
-    h(
-      'span',
-      { className: 'n-tag' },
-      resolveChildren(node.ch, ctx),
-      prop(node, 'onRemove', ctx) ? h('button', { onClick: prop(node, 'onRemove', ctx), style: { border: 'none', background: 'none', cursor: 'pointer', padding: 0, marginLeft: 4 } }, '×') : null
-    ),
-
-  Alert: (node, ctx) =>
-    h(
-      'div',
-      { className: `n-alert ${toneClass(prop(node, 'variant', ctx, 'info'))}` },
-      h('div', null, prop(node, 'title', ctx) ? h('strong', { style: { display: 'block', marginBottom: 2 } }, prop(node, 'title', ctx)) : null, resolveChildren(node.ch, ctx))
-    ),
-
-  SurfaceCard: (node, ctx) =>
-    h(
-      'div',
-      { className: 'n-surface-card' },
-      prop(node, 'title', ctx) || prop(node, 'headerAction', ctx)
-        ? h('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 } }, h('strong', null, prop(node, 'title', ctx)), prop(node, 'headerAction', ctx))
-        : null,
-      resolveChildren(node.ch, ctx),
-      prop(node, 'footer', ctx) ? h('div', { style: { marginTop: 12, borderTop: '1px solid var(--t1-border)', paddingTop: 10 } }, prop(node, 'footer', ctx)) : null
-    ),
-
-  Input: (node, ctx) => {
-    const value = valueOf(node, 'value', ctx, '');
-    const onChange = handlerOf(node, 'onChange', ctx, (v) => v);
-    return h(
-      'div',
-      { className: 'n-field' },
-      prop(node, 'label', ctx) ? h('label', null, prop(node, 'label', ctx)) : null,
-      h('input', {
-        className: 'n-input',
-        type: prop(node, 'type', ctx, 'text'),
-        placeholder: prop(node, 'placeholder', ctx),
-        disabled: !!prop(node, 'disabled', ctx),
-        readOnly: !!prop(node, 'readOnly', ctx),
-        value: value ?? '',
-        onChange: onChange ? (e) => onChange(e.target.value) : undefined,
-      }),
-      prop(node, 'helper', ctx) ? h('div', { className: 'n-help' }, prop(node, 'helper', ctx)) : null
-    );
-  },
-
-  Textarea: (node, ctx) => {
-    const value = valueOf(node, 'value', ctx, '');
-    const onChange = handlerOf(node, 'onChange', ctx, (v) => v);
-    return h(
-      'div',
-      { className: 'n-field' },
-      prop(node, 'label', ctx) ? h('label', null, prop(node, 'label', ctx)) : null,
-      h('textarea', {
-        className: 'n-textarea',
-        rows: prop(node, 'rows', ctx, 4),
-        placeholder: prop(node, 'placeholder', ctx),
-        disabled: !!prop(node, 'disabled', ctx),
-        value: value ?? '',
-        onChange: onChange ? (e) => onChange(e.target.value) : undefined,
-      })
-    );
-  },
-
-  Select: (node, ctx) => {
-    const options = prop(node, 'options', ctx, []) || [];
-    const value = valueOf(node, 'value', ctx, '');
-    const onChange = handlerOf(node, 'onChange', ctx, (v) => v);
-    return h(
-      'div',
-      { className: 'n-field' },
-      prop(node, 'label', ctx) ? h('label', null, prop(node, 'label', ctx)) : null,
-      h(
-        'select',
-        { className: 'n-select', disabled: !!prop(node, 'disabled', ctx), value: value ?? '', onChange: onChange ? (e) => onChange(e.target.value) : undefined },
-        options.map((opt, i) => h('option', { key: opt.value ?? i, value: opt.value }, opt.label ?? String(opt.value)))
-      )
-    );
-  },
-
-  Checkbox: (node, ctx) => {
-    const checked = valueOf(node, 'checked', ctx, false);
-    const onCheckedChange = handlerOf(node, 'onCheckedChange', ctx, (v) => v);
-    return h(
-      'label',
-      { className: 'n-checkbox-row' },
-      h('input', { type: 'checkbox', disabled: !!prop(node, 'disabled', ctx), checked: !!checked, onChange: onCheckedChange ? (e) => onCheckedChange(e.target.checked) : undefined }),
-      prop(node, 'label', ctx)
-    );
-  },
-
-  Switch: (node, ctx) => {
-    const checked = valueOf(node, 'checked', ctx, false);
-    const onCheckedChange = handlerOf(node, 'onCheckedChange', ctx, (v) => v);
-    return h(
-      'label',
-      { className: 'n-switch-row' },
-      h('input', { type: 'checkbox', disabled: !!prop(node, 'disabled', ctx), checked: !!checked, onChange: onCheckedChange ? (e) => onCheckedChange(e.target.checked) : undefined }),
-      prop(node, 'label', ctx)
-    );
-  },
-
+  // Tabs' real signature wants every tab's `content` already resolved into a ReactNode (it
+  // decides internally which one to show) — unlike DataTable cells, there's no "only resolve the
+  // active one" option here, so we resolve them all, once, per render.
   Tabs: (node, ctx) => {
-    // `tabs` stays RAW here — each tab's `content` is a deferred Node template, resolved once,
-    // only for whichever tab is active (resolving the whole array eagerly would build a React
-    // element for every tab's content on every render, and re-resolving it later double-resolves
-    // an already-built element instead of the original JSON).
-    const tabs = (node.p && Array.isArray(node.p.tabs)) ? node.p.tabs : [];
-    const activeId = valueOf(node, 'activeId', ctx, tabs[0] && tabs[0].id);
-    const onSelect = handlerOf(node, 'onSelect', ctx, (id) => id);
-    const active = tabs.find((t) => t.id === activeId) || tabs[0];
-    return h(
-      'div',
-      null,
-      h(
-        'div',
-        { className: 'n-tabs' },
-        tabs.map((t) => h('button', { key: t.id, className: `n-tab${t.id === activeId ? ' active' : ''}`, onClick: () => onSelect && onSelect(t.id) }, resolveValue(t.label, ctx)))
-      ),
-      active && active.content !== undefined ? h('div', { className: 'n-tab-panel' }, resolveValue(active.content, ctx)) : null
-    );
+    const rawTabs = node.p && Array.isArray(node.p.tabs) ? node.p.tabs : [];
+    const tabs = rawTabs.map((t) => ({
+      id: t.id,
+      label: resolveValue(t.label, ctx),
+      content: t.content !== undefined ? resolveValue(t.content, ctx) : undefined,
+    }));
+    return h(N.Tabs, {
+      tabs,
+      activeId: valueOf(node, 'activeId', ctx, rawTabs[0] && rawTabs[0].id),
+      onSelect: handlerOf(node, 'onSelect', ctx, (id) => id) || (() => {}),
+    });
   },
 
+  // DataTable's real `rowKey` is a function and `columns[].render` is a function — ScreenSpec's
+  // JSON-safe substitutes (`rowKey` as a field name, `cell` instead of `render`, per
+  // SCREENSPEC.md §DataTable) get converted here, at the boundary, into what the real component
+  // expects. `cell` must stay a RAW template resolved per-row inside `render`, not resolved once
+  // up front — resolving it eagerly would build one React element shared across every row.
   DataTable: (node, ctx) => {
-    // `columns` stays RAW here — `cell` is a deferred per-row Node/`$row` template that must be
-    // resolved fresh for EACH row with that row's own context. Resolving the whole `columns` array
-    // up front (as `prop()` would) builds `cell` into a React element with no row bound yet, and
-    // the per-row loop below would then double-resolve that already-built element instead of the
-    // original JSON template.
-    const columns = (node.p && Array.isArray(node.p.columns)) ? node.p.columns : [];
+    const p = node.p || {};
+    const rawColumns = Array.isArray(p.columns) ? p.columns : [];
     const rows = prop(node, 'rows', ctx, []) || [];
-    const rowKeyField = node.p ? node.p.rowKey : undefined;
-    if (!rows.length) {
-      return prop(node, 'empty', ctx) || h('div', { className: 'n-empty-state' }, h('h3', null, 'Sin filas'), 'Esta tabla no tiene datos que mostrar.');
-    }
-    return h(
-      'table',
-      { className: 'n-table' },
-      h('thead', null, h('tr', null, columns.map((c) => h('th', { key: c.key, className: c.align === 'right' ? 'align-right' : '' }, resolveValue(c.header, ctx))))),
-      h(
-        'tbody',
-        null,
-        rows.map((row, ri) =>
-          h(
-            'tr',
-            { key: rowKeyField ? row[rowKeyField] : ri },
-            columns.map((c) =>
-              h('td', { key: c.key, className: c.align === 'right' ? 'align-right' : '' }, c.cell !== undefined ? resolveValue(c.cell, { ...ctx, row }) : row[c.key])
-            )
-          )
-        )
-      )
-    );
+    const rowKeyField = p.rowKey;
+    const columns = rawColumns.map((c) => ({
+      key: c.key,
+      header: resolveValue(c.header, ctx),
+      align: c.align,
+      render: c.cell !== undefined ? (row) => resolveValue(c.cell, { ...ctx, row }) : (row) => row[c.key],
+    }));
+    return h(N.DataTable, {
+      columns,
+      rows,
+      rowKey: (row) => (rowKeyField ? row[rowKeyField] : undefined),
+      caption: prop(node, 'caption', ctx),
+      empty: prop(node, 'empty', ctx),
+    });
   },
-
-  Pagination: (node, ctx) => {
-    const page = valueOf(node, 'page', ctx, 1);
-    const pageCount = prop(node, 'pageCount', ctx, 1);
-    if (pageCount <= 1) return null;
-    const onPageChange = handlerOf(node, 'onPageChange', ctx, (n) => n);
-    const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
-    return h(
-      'div',
-      { className: 'n-pagination' },
-      h('nav', { 'aria-label': prop(node, 'label', ctx, 'Paginación') }),
-      pages.map((n) => h('button', { key: n, className: n === page ? 'active' : '', onClick: onPageChange ? () => onPageChange(n) : undefined }, n))
-    );
-  },
-
-  EmptyState: (node, ctx) =>
-    h(
-      'div',
-      { className: 'n-empty-state' },
-      prop(node, 'icon', ctx),
-      h('h3', null, prop(node, 'title', ctx, 'Sin datos')),
-      prop(node, 'body', ctx) ? h('div', null, prop(node, 'body', ctx)) : null,
-      prop(node, 'action', ctx) ? h('div', { style: { marginTop: 12 } }, prop(node, 'action', ctx)) : null
-    ),
-
-  Avatar: (node, ctx) => {
-    const src = prop(node, 'src', ctx);
-    if (src) return h('img', { src, alt: prop(node, 'name', ctx, ''), className: 'n-avatar', style: { objectFit: 'cover' } });
-    return h('span', { className: 'n-avatar' }, (prop(node, 'name', ctx, '?') || '?').slice(0, 2).toUpperCase());
-  },
-
-  Toast: (node, ctx) => h('div', { className: 'n-toast' }, resolveChildren(node.ch, ctx)),
-  ToastProvider: (node, ctx) => h(React.Fragment, null, resolveChildren(node.ch, ctx)),
-
-  Dialog: (node, ctx) => {
-    const open = valueOf(node, 'open', ctx, false);
-    if (!open) return null;
-    const onClose = handlerOf(node, 'onClose', ctx, () => false);
-    return h(
-      'div',
-      { className: 'n-dialog-overlay', onClick: onClose },
-      h(
-        'div',
-        { className: 'n-dialog', onClick: (e) => e.stopPropagation() },
-        prop(node, 'title', ctx) ? h('h3', null, prop(node, 'title', ctx)) : null,
-        h('div', null, resolveChildren(node.ch, ctx)),
-        prop(node, 'footer', ctx) ? h('div', { className: 'n-dialog-actions' }, prop(node, 'footer', ctx)) : null
-      )
-    );
-  },
-
-  // A real React component (not a plain function) — it owns local open/closed state via a hook,
-  // so it MUST be mounted through createElement, never called directly like the other renderers.
-  RowActionsMenu: (node, ctx) => h(RowActionsMenuImpl, { node, ctx }),
-
-  RichText: (node, ctx) => h('div', null, resolveChildren(node.ch, ctx)),
 };
-
-// Soft-generic renderer for real Nexus components we haven't hand-built a visual for yet (mostly
-// marketing/landing surfaces: Hero, Banner, Collage, SectionStack, T1LifestyleCards…). Keeps the
-// tree readable and honest — it IS a real component, just not invested in preview fidelity yet.
-function renderGenericKnown(node, ctx) {
-  const label = prop(node, 'title', ctx) || prop(node, 'heading', ctx) || prop(node, 'text', ctx);
-  return h(
-    'div',
-    { className: 'n-surface-card' },
-    h('div', { style: { fontSize: 11, color: 'var(--t1-muted)', fontWeight: 700, textTransform: 'uppercase', marginBottom: 6 } }, node.c),
-    label ? h('div', { style: { fontWeight: 600, marginBottom: 4 } }, label) : null,
-    resolveChildren(node.ch, ctx)
-  );
-}
 
 function renderNode(node, ctx) {
   if (!node || typeof node !== 'object') return node;
   if (node.c === 'Box') return renderBox(node, ctx);
   if (node.c === 'Escape') return renderEscape(node, ctx);
-  const impl = COMPONENTS[node.c];
-  if (impl) return impl(node, ctx);
+  const adapter = ADAPTERS[node.c];
+  if (adapter) return adapter(node, ctx);
+  if (N[node.c]) {
+    // Generic passthrough for any other real, compiled Nexus component — every prop resolves
+    // 1:1 via $row/$state/$act/nested-Node handling, which is correct as long as the component
+    // has no per-item deferred content (the ADAPTERS above exist precisely for the ones that do).
+    return h(N[node.c], resolveValue(node.p || {}, ctx), resolveChildren(node.ch, ctx));
+  }
   return renderGenericKnown(node, ctx);
+}
+
+// Soft-generic fallback for a real Nexus component NOT compiled into vendor/nexus-react.bundle.js
+// (e.g. T1FinalCTA, or anything from the chat-kit/landing subpackages) — keeps the tree readable
+// and honest: it IS a real component, just not vendored here yet.
+function renderGenericKnown(node, ctx) {
+  const label = prop(node, 'title', ctx) || prop(node, 'heading', ctx) || prop(node, 'text', ctx);
+  return h(
+    'div',
+    { className: 'n-generic-fallback' },
+    h('div', { style: { fontWeight: 700, textTransform: 'uppercase', fontSize: 11, marginBottom: 6 } }, node.c + ' (no vendorizado en el preview)'),
+    label ? h('div', { style: { fontWeight: 600, marginBottom: 4 } }, label) : null,
+    resolveChildren(node.ch, ctx)
+  );
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -500,7 +355,7 @@ function App({ screens, initialSlug }) {
     React.Fragment,
     null,
     tree,
-    h('div', { className: 't1-shell-badge' }, 'Vista previa T1 Studio — aproximación, no el componente Nexus real')
+    h('div', { className: 't1-shell-badge' }, 'Vista previa T1 Studio — componentes reales de Nexus, ensamblados para este prototipo')
   );
 }
 
