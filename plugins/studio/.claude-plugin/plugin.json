@@ -1,7 +1,7 @@
 {
   "name": "studio",
   "displayName": "T1 Studio",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Deja que un Product Owner convierta una idea difusa o un documento de definición ya maduro en un prototipo React interactivo real, compuesto solo con componentes Nexus, validado mecánicamente, navegable en localhost, iterable por chat y con handoff trazable a los IDs del documento fuente. Empaqueta el manifiesto de Nexus, el criterio UX de T1, el validador y el motor de preview — nadie necesita clonar el proyecto del kit.",
   "author": {
     "name": "Alejandro Mauricio Reyes Delgado",

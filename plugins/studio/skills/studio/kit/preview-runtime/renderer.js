@@ -27,26 +27,32 @@ const h = React.createElement;
 // Effects
 // ---------------------------------------------------------------------------------------------
 
+// `effect` is one op object, OR an array of them applied in order (e.g. "go to checkout AND
+// remember which plan" is two ops from one click) — see SCREENSPEC.md §Prototype extensions.
 function applyEffect(effect, setState, setActiveScreen) {
-  if (!effect || !effect.op) return;
-  switch (effect.op) {
-    case 'set':
-      setState((s) => ({ ...s, [effect.key]: effect.value }));
-      break;
-    case 'toggle':
-      setState((s) => ({ ...s, [effect.key]: !s[effect.key] }));
-      break;
-    case 'increment':
-      setState((s) => ({ ...s, [effect.key]: (Number(s[effect.key]) || 0) + (effect.by ?? 1) }));
-      break;
-    case 'decrement':
-      setState((s) => ({ ...s, [effect.key]: (Number(s[effect.key]) || 0) - (effect.by ?? 1) }));
-      break;
-    case 'navigate':
-      if (effect.to && setActiveScreen) setActiveScreen(effect.to);
-      break;
-    default:
-      break;
+  if (!effect) return;
+  const ops = Array.isArray(effect) ? effect : [effect];
+  for (const op of ops) {
+    if (!op || !op.op) continue;
+    switch (op.op) {
+      case 'set':
+        setState((s) => ({ ...s, [op.key]: op.value }));
+        break;
+      case 'toggle':
+        setState((s) => ({ ...s, [op.key]: !s[op.key] }));
+        break;
+      case 'increment':
+        setState((s) => ({ ...s, [op.key]: (Number(s[op.key]) || 0) + (op.by ?? 1) }));
+        break;
+      case 'decrement':
+        setState((s) => ({ ...s, [op.key]: (Number(s[op.key]) || 0) - (op.by ?? 1) }));
+        break;
+      case 'navigate':
+        if (op.to && setActiveScreen) setActiveScreen(op.to);
+        break;
+      default:
+        break;
+    }
   }
 }
 

@@ -164,7 +164,9 @@ types require (a function-typed prop only accepts `$act` or `$bind`, never a lit
 
 **`{ "$act": "id", "effect": {...} }`** — `effect` is a new OPTIONAL field on the existing `$act`
 placeholder. A bare `{ "$act": "id" }` is still exactly what it always was (a no-op in the POC
-renderer) — existing screens keep working unchanged. `effect.op` is one of:
+renderer) — existing screens keep working unchanged. `effect` is one op object, or an ARRAY of them
+applied in order (e.g. moving to checkout AND recording which plan was picked, from one click).
+Each op's `op` is one of:
 
 | op | fields | does |
 | --- | --- | --- |
