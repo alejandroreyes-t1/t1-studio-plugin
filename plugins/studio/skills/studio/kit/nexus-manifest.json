@@ -1,0 +1,1987 @@
+{
+  "library": "@t1/nexus-react",
+  "generatedFrom": "libs/shared/nexus/l3-nexus-react/src",
+  "note": "props[] is authoritative (from the TS AST). `values` lists a union prop members verbatim.",
+  "componentCount": 32,
+  "components": [
+    {
+      "name": "Alert",
+      "summary": "A stateless, token-styled inline alert. Renders a `<div>` with a severity-appropriate live-region role; an optional `icon`, `title`, and — when `onClose` is provided — an accessible dismiss button. All behavior is delegated via props.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "aria-atomic",
+          "type": "boolean",
+          "required": false,
+          "doc": "Optional explicit `aria-atomic`, forwarded to the root element (announce the whole region)."
+        },
+        {
+          "name": "aria-live",
+          "type": "'assertive' | 'polite' | 'off'",
+          "required": false,
+          "values": [
+            "assertive",
+            "polite",
+            "off"
+          ],
+          "doc": "Optional explicit live-region politeness, forwarded to the root element. The `role` (alert vs status) already carries an *implicit* live setting; a composer that treats this element as the live region (e.g. `<Toast>`) can set it *explicitly* for belt-and-suspenders AT support. When omitted, the role's implicit politeness applies — today's behavior is unchanged."
+        },
+        {
+          "name": "closeLabel",
+          "type": "string",
+          "required": false,
+          "default": "Cerrar",
+          "doc": "Accessible label for the dismiss control — localized by the caller (default `Cerrar`)."
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Optional leading icon element, tinted to the variant's border color."
+        },
+        {
+          "name": "onClose",
+          "type": "() => void",
+          "required": false,
+          "doc": "When provided, renders an accessible dismiss (`×`) control and calls this on activation."
+        },
+        {
+          "name": "title",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Optional bold title above the body."
+        },
+        {
+          "name": "variant",
+          "type": "AlertVariant",
+          "required": false,
+          "values": [
+            "success",
+            "warning",
+            "error",
+            "info"
+          ],
+          "default": "info",
+          "doc": "The semantic severity. Defaults to `info`."
+        }
+      ]
+    },
+    {
+      "name": "AnnouncementBar",
+      "summary": "A stateless announcement bar: one line of chrome text.",
+      "props": [
+        {
+          "name": "text",
+          "type": "string",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "Avatar",
+      "summary": "A stateless, token-styled identity chip. With `src` it renders an `<img alt={name || undefined}>`; without, it shows the derived initials (or `?` when `name` is empty). Purely presentational — the caller supplies identity data; this imports NO domain entity type.",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "default": "",
+          "doc": "Display name — drives the initials fallback (first two words) and the hover `title`/`alt`."
+        },
+        {
+          "name": "shape",
+          "type": "AvatarShape",
+          "required": false,
+          "values": [
+            "circle",
+            "rounded"
+          ],
+          "default": "circle",
+          "doc": "Outline shape. Defaults to `circle`."
+        },
+        {
+          "name": "size",
+          "type": "number",
+          "required": false,
+          "default": "36",
+          "doc": "Pixel diameter/side. Defaults to 36. The initials font scales to 40% of this."
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "required": false,
+          "doc": "Image URL. When present it renders as the avatar; otherwise initials are derived from `name`."
+        }
+      ]
+    },
+    {
+      "name": "Badge",
+      "summary": "A stateless, token-styled status chip. Renders a `<span>`; when `dot` is set it prepends a small `aria-hidden` accent dot (decorative — the text carries the meaning). All styling flows from the `tone` → brand-key mapping.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "dot",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "doc": "When `true`, renders a small leading dot in the tone's accent color."
+        },
+        {
+          "name": "tone",
+          "type": "BadgeTone",
+          "required": false,
+          "values": [
+            "success",
+            "warning",
+            "caution",
+            "error",
+            "info",
+            "neutral",
+            "premium",
+            "ai"
+          ],
+          "default": "neutral",
+          "doc": "The semantic status. Defaults to `neutral`."
+        }
+      ]
+    },
+    {
+      "name": "Banner",
+      "summary": "A stateless, PURE-SERVER promotional banner block. Its `<img>` is a small `<FallbackImage>` CLIENT ISLAND (the one stateful element — a broken-URL fallback), so this section shell ships no hydration JS (FCA island-the-state). Renders a headline + body + up to two CTA links, either centered over a (tinted) background image or beside an image column in a split layout. Every visible piece is optional — an all-absent section still renders an inert shell rather than throwing (the \"degrade, never crash\" law). An `animation` media banner falls through to the image/placeholder path.",
+      "props": [
+        {
+          "name": "text",
+          "type": "string",
+          "required": true,
+          "doc": "Body copy. MUST be pre-sanitized by the caller — it renders via `dangerouslySetInnerHTML` (legacy parity: the oracle renders `text` through `dangerouslySetInnerHTML`), so a merchant `<strong>`/`<em>` split survives. Mirrors `BannerProps.heading`'s seam."
+        },
+        {
+          "name": "backgroundColor",
+          "type": "string",
+          "required": false,
+          "doc": "Per-field background color override (resolved CSS color). Unset = the layout default."
+        },
+        {
+          "name": "backgroundColorHex",
+          "type": "string",
+          "required": false,
+          "doc": "The per-field `backgroundColor` RESOLVED to a concrete `#rrggbb` by the caller (`NexusBannerAdapter`), used ONLY for the AUTO text-contrast decision — the LIVE fill still uses `BannerProps.backgroundColor` (a CSS var). Lets contrast work for swatch picks (palette tokens like `white`/`accent`), not only literal hexes. Unset ⇒ contrast falls back to `backgroundColor` (a literal hex) or the layout heuristic."
+        },
+        {
+          "name": "containerWidth",
+          "type": "BannerContainerWidth",
+          "required": false,
+          "values": [
+            "4xl",
+            "6xl",
+            "7xl",
+            "full"
+          ],
+          "default": "7xl",
+          "doc": "Centered-layout content max-width. Defaults to `7xl`."
+        },
+        {
+          "name": "contentAlignment",
+          "type": "BannerContentAlignment",
+          "required": false,
+          "values": [
+            "auto",
+            "left",
+            "center",
+            "right"
+          ],
+          "default": "auto",
+          "doc": "Content-block position. Defaults to `auto` (layout default)."
+        },
+        {
+          "name": "contentSpacing",
+          "type": "BannerSpacing",
+          "required": false,
+          "values": [
+            "none",
+            "small",
+            "medium",
+            "large"
+          ],
+          "default": "medium",
+          "doc": "Content-stack gap. Defaults to `medium`."
+        },
+        {
+          "name": "cta",
+          "type": "BannerCta",
+          "required": false,
+          "doc": "Primary call-to-action (accent-filled button). Its `label`/`href` MUST be pre-sanitized."
+        },
+        {
+          "name": "ctaBackgroundColor",
+          "type": "string",
+          "required": false,
+          "doc": "Per-field CTA background color override (resolved CSS color). Unset = the accent token."
+        },
+        {
+          "name": "ctaBackgroundColorHex",
+          "type": "string",
+          "required": false,
+          "doc": "The per-field `ctaBackgroundColor` RESOLVED to a concrete `#rrggbb` by the caller, used ONLY to derive the primary-CTA LABEL color via contrast when no explicit `ctaTextColor` is set (legacy parity — the oracle contrasts the CTA label against its button fill). The live button fill still uses `BannerProps.ctaBackgroundColor`."
+        },
+        {
+          "name": "ctaTextColor",
+          "type": "string",
+          "required": false,
+          "doc": "Per-field CTA text color override (resolved CSS color). Unset = the bg token."
+        },
+        {
+          "name": "heading",
+          "type": "string",
+          "required": false,
+          "doc": "Optional distinct headline. MUST be pre-sanitized by the caller — it renders via `dangerouslySetInnerHTML` so a merchant-authored `<strong>`/`<em>` split (the legacy heading grammar) survives instead of being flattened. Mirrors `ImageWithText`'s `heading` seam."
+        },
+        {
+          "name": "headingColor",
+          "type": "string",
+          "required": false,
+          "doc": "Per-field heading color override (resolved CSS color). Unset = the derived text color."
+        },
+        {
+          "name": "height",
+          "type": "BannerHeight",
+          "required": false,
+          "values": [
+            "small",
+            "medium",
+            "large",
+            "fullscreen"
+          ],
+          "default": "medium",
+          "doc": "Height preset. Defaults to `medium`."
+        },
+        {
+          "name": "image",
+          "type": "string",
+          "required": false,
+          "doc": "Optional background/column image URL. MUST be pre-sanitized (`sanitizeHref`) by the caller."
+        },
+        {
+          "name": "imageAlt",
+          "type": "string",
+          "required": false,
+          "doc": "Accessible name for the image; when absent the image is decorative (`aria-hidden`)."
+        },
+        {
+          "name": "imagePosition",
+          "type": "BannerImagePosition",
+          "required": false,
+          "doc": "Image focal point (`object-position`). Defaults to centered (50/50)."
+        },
+        {
+          "name": "layout",
+          "type": "BannerLayout",
+          "required": false,
+          "values": [
+            "centered",
+            "split-left",
+            "split-right"
+          ],
+          "default": "centered",
+          "doc": "Layout variant. Defaults to `centered`."
+        },
+        {
+          "name": "overlayColor",
+          "type": "BannerOverlayColor",
+          "required": false,
+          "values": [
+            "black",
+            "white"
+          ],
+          "default": "black",
+          "doc": "Overlay tint (centered layout only). Defaults to `black`."
+        },
+        {
+          "name": "overlayOpacity",
+          "type": "number",
+          "required": false,
+          "default": "40",
+          "doc": "Overlay darkness over a background image, 0–100 (centered layout only). Defaults to 40."
+        },
+        {
+          "name": "secondaryCta",
+          "type": "BannerCta",
+          "required": false,
+          "doc": "Optional secondary call-to-action (outlined button). Its `label`/`href` MUST be pre-sanitized."
+        },
+        {
+          "name": "sectionSpacing",
+          "type": "BannerSpacing",
+          "required": false,
+          "values": [
+            "none",
+            "small",
+            "medium",
+            "large"
+          ],
+          "default": "none",
+          "doc": "Outer block margin rhythm. Defaults to `none`."
+        },
+        {
+          "name": "textAlignment",
+          "type": "BannerTextAlignment",
+          "required": false,
+          "values": [
+            "left",
+            "center",
+            "right"
+          ],
+          "doc": "Text alignment within the block. Unset ⇒ follows the (effective) content alignment."
+        },
+        {
+          "name": "textColor",
+          "type": "string",
+          "required": false,
+          "doc": "Per-field body color override (resolved CSS color). Unset = the derived text color."
+        },
+        {
+          "name": "textColorMode",
+          "type": "BannerTextColorMode",
+          "required": false,
+          "values": [
+            "auto",
+            "light",
+            "dark"
+          ],
+          "default": "auto",
+          "doc": "Text-color derivation mode. Defaults to `auto` (derive from overlay/layout)."
+        },
+        {
+          "name": "textSize",
+          "type": "BannerTextSize",
+          "required": false,
+          "values": [
+            "s",
+            "m",
+            "l"
+          ],
+          "default": "m",
+          "doc": "Body size preset. Defaults to `m`."
+        },
+        {
+          "name": "titleSize",
+          "type": "BannerTitleSize",
+          "required": false,
+          "values": [
+            "s",
+            "m",
+            "l",
+            "xl"
+          ],
+          "default": "m",
+          "doc": "Heading size preset. Defaults to `m`."
+        },
+        {
+          "name": "verticalPosition",
+          "type": "BannerVerticalPosition",
+          "required": false,
+          "values": [
+            "top",
+            "center",
+            "bottom"
+          ],
+          "default": "center",
+          "doc": "Vertical anchoring (centered layout only). Defaults to `center`."
+        }
+      ]
+    },
+    {
+      "name": "Button",
+      "summary": "A stateless, token-styled button. Renders a native `<button>` so it is keyboard- and screen-reader-accessible by default (role `button`). All behavior is delegated via `onClick`. Passing `disabled` makes it genuinely inert (not focusable, not activatable) — see `ButtonProps`.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "doc": "When `true`, the button is genuinely inert: the native `disabled` attribute removes it from the tab order and blocks activation (click/Enter), `aria-disabled` exposes the state to AT, and the cursor becomes `not-allowed`. Backward-compatible — `undefined` is today's enabled behavior."
+        },
+        {
+          "name": "onClick",
+          "type": "() => void",
+          "required": false
+        },
+        {
+          "name": "variant",
+          "type": "ButtonVariant",
+          "required": false,
+          "values": [
+            "primary",
+            "secondary"
+          ],
+          "default": "primary"
+        }
+      ]
+    },
+    {
+      "name": "Checkbox",
+      "summary": "A stateless, token-styled checkbox. The visible box is painted over a visually-hidden native `<input type=\"checkbox\">`, so it is keyboard- and screen-reader-accessible and associated to its `label` by id. The checked state is controlled — `checked` in, `onCheckedChange(next)` out.",
+      "props": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "required": true,
+          "doc": "Controlled checked state — the caller owns it; this component holds no state."
+        },
+        {
+          "name": "onCheckedChange",
+          "type": "(checked: boolean) => void",
+          "required": true,
+          "doc": "Called with the next boolean on toggle. Behavior is fully delegated."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "doc": "When `true`, the native `disabled` attr removes it from the tab order and blocks toggling."
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "doc": "Explicit element id. Falls back to a slug of `label` so the `<label htmlFor>` stays wired."
+        },
+        {
+          "name": "indeterminate",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "doc": "Mixed/partial visual register (the dash). Paints as filled + exposes `aria-checked=\"mixed\"`. Note: toggling a mixed box fires `onCheckedChange` with the underlying native boolean (never `\"mixed\"`) — the caller owns the mixed → checked transition."
+        },
+        {
+          "name": "label",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Visible label text, associated to the box by id. Recommended for an accessible name."
+        }
+      ]
+    },
+    {
+      "name": "Collage",
+      "summary": "A stateless collage block: an optional heading above a tokenized grid of tiles. Pure — owns no state. An empty `blocks` array renders an empty grid rather than throwing (the \"degrade, never crash\" law).",
+      "props": [
+        {
+          "name": "blocks",
+          "type": "readonly CollageTile[]",
+          "required": true,
+          "doc": "The tiles to render. An empty array renders an empty, inert grid (never throws)."
+        },
+        {
+          "name": "columns",
+          "type": "number",
+          "required": false,
+          "default": "3",
+          "doc": "Desktop column count; clamped to at least 1. Defaults to 3."
+        },
+        {
+          "name": "heading",
+          "type": "string",
+          "required": false,
+          "doc": "Optional section heading rendered above the tile grid."
+        }
+      ]
+    },
+    {
+      "name": "DataTable",
+      "summary": "A stateless, token-styled table shell. Generic over the row type `T`; each column projects a cell via `render` (defaulting to the row's `key` field). Server-safe — it renders on the server for a read-only table and, when an `onSort` handler is supplied by a client parent, wires sortable headers as buttons.",
+      "props": [
+        {
+          "name": "columns",
+          "type": "ReadonlyArray<DataTableColumn<T>>",
+          "required": true
+        },
+        {
+          "name": "rowKey",
+          "type": "(row: T) => string | number",
+          "required": true,
+          "doc": "Stable per-row key (never the array index)."
+        },
+        {
+          "name": "rows",
+          "type": "ReadonlyArray<T>",
+          "required": true
+        },
+        {
+          "name": "caption",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Optional visually-hidden `<caption>` for the table's accessible name."
+        },
+        {
+          "name": "empty",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Rendered (spanning every column) when `rows` is empty — compose a Nexus `<EmptyState>`."
+        },
+        {
+          "name": "onSort",
+          "type": "(key: string) => void",
+          "required": false,
+          "doc": "Sort handler. Its presence turns `sortable` headers into buttons."
+        },
+        {
+          "name": "sort",
+          "type": "{ readonly key: string; readonly direction: SortDirection }",
+          "required": false,
+          "doc": "The currently sorted column + direction — drives `aria-sort` and the indicator."
+        }
+      ]
+    },
+    {
+      "name": "Dialog",
+      "summary": "A modal / drawer surface. Portals to `document.body`, traps focus while open, closes on `Escape` or a backdrop click, and restores focus on close. Purely presentational — the caller owns `open` and every action; it holds only its own enter transition + the focus-trap machinery.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true,
+          "doc": "The dialog body (a form, a confirmation message, …)."
+        },
+        {
+          "name": "onClose",
+          "type": "() => void",
+          "required": true,
+          "doc": "Invoked by the backdrop click, the `Escape` key, and the built-in close control."
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": true,
+          "doc": "Whether the dialog is mounted + visible. When `false`, renders `null` (nothing in the DOM)."
+        },
+        {
+          "name": "title",
+          "type": "ReactNode",
+          "required": true,
+          "doc": "The accessible title — becomes the heading and the `aria-labelledby` target."
+        },
+        {
+          "name": "closeLabel",
+          "type": "string",
+          "required": false,
+          "default": "Cerrar",
+          "doc": "Accessible label for the built-in close control — localized by the caller (default `Cerrar`)."
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Optional footer region for actions (e.g. Cancel / Save), pinned below the body."
+        },
+        {
+          "name": "variant",
+          "type": "DialogVariant",
+          "required": false,
+          "values": [
+            "modal",
+            "drawer"
+          ],
+          "default": "modal",
+          "doc": "`modal` (centered card, default) or `drawer` (right side sheet)."
+        }
+      ]
+    },
+    {
+      "name": "EmptyState",
+      "summary": "A stateless, token-styled empty placeholder. Announces itself via `role=\"status\"`; the icon is decorative and the `action` slot is whatever the caller renders.",
+      "props": [
+        {
+          "name": "title",
+          "type": "ReactNode",
+          "required": true,
+          "doc": "The primary line — what is empty / what to do. Carries the accessible meaning."
+        },
+        {
+          "name": "action",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Optional call-to-action slot (a rendered node — keeps this component server-safe)."
+        },
+        {
+          "name": "body",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Optional secondary explanatory line."
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Optional decorative glyph above the title (e.g. an `<Icon>`). Rendered `aria-hidden`."
+        }
+      ]
+    },
+    {
+      "name": "FallbackImage",
+      "summary": "An `<img>` that degrades to `fallback` on a load error (broken-URL fallback).",
+      "props": [
+        {
+          "name": "alt",
+          "type": "string",
+          "required": true,
+          "doc": "Accessible name; pass `''` + `ariaHidden` for a decorative image."
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "required": true,
+          "doc": "The image URL."
+        },
+        {
+          "name": "ariaHidden",
+          "type": "boolean",
+          "required": false,
+          "doc": "Mark the image decorative (`aria-hidden`) when it carries no accessible name."
+        },
+        {
+          "name": "fallback",
+          "type": "ReactNode",
+          "required": false,
+          "default": "null",
+          "doc": "Rendered INSTEAD of the `<img>` when `src` fails to load. Default: nothing (the caller's own placeholder/background shows through)."
+        },
+        {
+          "name": "style",
+          "type": "CSSProperties",
+          "required": false,
+          "doc": "Inline styles applied to the `<img>`."
+        }
+      ]
+    },
+    {
+      "name": "Hero",
+      "summary": "A stateless hero block. The CTA renders only when a label is supplied.",
+      "props": [
+        {
+          "name": "heading",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "ctaLabel",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "image",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "onCta",
+          "type": "() => void",
+          "required": false
+        },
+        {
+          "name": "subheading",
+          "type": "string",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "Icon",
+      "summary": "A stateless SVG frame. When `label` is set the glyph is meaningful (`role=\"img\"`, `aria-label`); otherwise it is decorative (`aria-hidden`). Draws in `currentColor`. The caller supplies the `viewBox` + inner `path` markup — this component imports NO icon registry and NO domain type.",
+      "props": [
+        {
+          "name": "path",
+          "type": "string",
+          "required": true,
+          "doc": "The glyph's inner SVG markup (`<path .../>`, `<g>…`, …) as a raw string. Rendered verbatim into the `<svg>`; the caller owns this content and MUST supply trusted, static markup (it is injected via `dangerouslySetInnerHTML`, the only faithful way to render opaque vector-path strings)."
+        },
+        {
+          "name": "viewBox",
+          "type": "string",
+          "required": true,
+          "doc": "The SVG `viewBox` for the supplied glyph (e.g. `\"0 0 24 24\"`)."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "doc": "Accessible name. When provided, the glyph is exposed to AT as `role=\"img\"` with this `aria-label`; when omitted, the glyph is decorative and marked `aria-hidden`."
+        },
+        {
+          "name": "size",
+          "type": "number",
+          "required": false,
+          "default": "24",
+          "doc": "Pixel width/height (square). Defaults to 24."
+        }
+      ]
+    },
+    {
+      "name": "IconButton",
+      "summary": "A stateless, token-styled icon-only button. Renders a native `<button>` so it is keyboard- and screen-reader-accessible by default, named by the required `label` (`aria-label`). All behavior is delegated via `onClick`. Passing `disabled` makes it genuinely inert — see `IconButtonProps`.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true,
+          "doc": "The glyph to render — typically an `<Icon>` element."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "doc": "REQUIRED accessible name. An icon-only button carries no text, so this becomes its `aria-label` — localized by the caller. Without it the control is invisible to AT."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "doc": "When `true`, the button is genuinely inert: the native `disabled` attribute removes it from the tab order and blocks activation, `aria-disabled` exposes the state to AT, and the cursor becomes `not-allowed`. Backward-compatible — `undefined` is today's enabled behavior."
+        },
+        {
+          "name": "onClick",
+          "type": "() => void",
+          "required": false
+        },
+        {
+          "name": "size",
+          "type": "IconButtonSize",
+          "required": false,
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "variant",
+          "type": "IconButtonVariant",
+          "required": false,
+          "values": [
+            "ghost",
+            "outline",
+            "primary"
+          ],
+          "default": "ghost"
+        }
+      ]
+    },
+    {
+      "name": "ImageWithText",
+      "summary": "A stateless, PURE-SERVER image-with-text block; its `<img>` is a small `<FallbackImage>` CLIENT ISLAND (broken-URL fallback), so the shell ships no hydration JS (FCA island-the-state). The figure is ALWAYS present (an `<img>` when `image` is set, a token-styled placeholder otherwise); the CTA renders only when a label is supplied. Every visible piece is optional — an all-absent section still renders an inert shell rather than throwing (the \"degrade, never crash\" law).",
+      "props": [
+        {
+          "name": "backgroundColor",
+          "type": "string",
+          "required": false,
+          "doc": "Per-section background color override (resolved CSS color). Unset = the token/transparent default."
+        },
+        {
+          "name": "columnGapPx",
+          "type": "number",
+          "required": false,
+          "doc": "Gap between the image and text columns, in px. Defaults to the token `calc(var(--space) * 2)`."
+        },
+        {
+          "name": "contentAlignment",
+          "type": "ImageWithTextAlignment",
+          "required": false,
+          "values": [
+            "start",
+            "center",
+            "end"
+          ],
+          "default": "start",
+          "doc": "How the text-column content aligns. Defaults to `start`."
+        },
+        {
+          "name": "ctaBackgroundColor",
+          "type": "string",
+          "required": false,
+          "doc": "Per-section CTA background color override (resolved CSS color)."
+        },
+        {
+          "name": "ctaHref",
+          "type": "string",
+          "required": false,
+          "doc": "A destination the CTA navigates to. When supplied (and non-empty), the CTA renders as a real `<a href>` (legacy parity: the CTA is a `<Link>`). When absent, the CTA falls back to the token `<Button>` driven by `ImageWithTextProps.onCta`. MUST be pre-sanitized by the caller (the adapter routes it through `sanitizeHref`)."
+        },
+        {
+          "name": "ctaLabel",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "ctaTextColor",
+          "type": "string",
+          "required": false,
+          "doc": "Per-section CTA text color override (resolved CSS color)."
+        },
+        {
+          "name": "focalPoint",
+          "type": "ImageFocalPoint",
+          "required": false,
+          "doc": "Image focal point (`object-position`); defaults to centered (50/50)."
+        },
+        {
+          "name": "heading",
+          "type": "string",
+          "required": false,
+          "doc": "The heading markup. MUST be pre-sanitized by the caller before reaching this prop — it renders via `dangerouslySetInnerHTML` so a merchant-authored `<strong>`/`<em>` split (the legacy heading grammar) survives instead of being flattened to plain text. This mirrors the codebase's established sanitize-at-the-seam pattern (`sanitize-merchant-html.ts`'s `sanitizeMerchantHtml`, and the vendored `l2-legacy-sections` modules' own `dangerouslySetInnerHTML={{ __html: … }}` usages) — this component trusts its caller the same way those do; it performs no sanitization of its own."
+        },
+        {
+          "name": "headingColor",
+          "type": "string",
+          "required": false,
+          "doc": "Per-section heading color override (resolved CSS color)."
+        },
+        {
+          "name": "image",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "imageHeightPx",
+          "type": "number",
+          "required": false,
+          "default": "380",
+          "doc": "A fixed image-column pixel height. The real legacy oracle sizes this figure by a FIXED PIXEL HEIGHT (keyed by the section's `image_height` preset), not a fixed aspect-ratio — `object-fit: cover` on a fixed height naturally varies the effective ratio by container width, matching legacy. Defaults to `380` (the legacy `medium` desktop token) when the caller doesn't resolve one. For the `overlay` layout this is the section's minimum height."
+        },
+        {
+          "name": "imageSide",
+          "type": "ImageSide",
+          "required": false,
+          "values": [
+            "start",
+            "end"
+          ],
+          "default": "start",
+          "doc": "Which column the image sits in (for the `split` layout). Defaults to `start`."
+        },
+        {
+          "name": "layout",
+          "type": "ImageWithTextLayout",
+          "required": false,
+          "values": [
+            "split",
+            "stacked",
+            "stacked-reverse",
+            "overlay"
+          ],
+          "default": "split",
+          "doc": "The image/text presentation. Defaults to `split`."
+        },
+        {
+          "name": "maxWidthPx",
+          "type": "number",
+          "required": false,
+          "default": "1280",
+          "doc": "The section's inner max content width, in px. Unset = full width (token behavior)."
+        },
+        {
+          "name": "onCta",
+          "type": "() => void",
+          "required": false
+        },
+        {
+          "name": "overlayColor",
+          "type": "string",
+          "required": false,
+          "default": "#000000",
+          "doc": "Overlay tint color for the `overlay` layout (resolved CSS color). Defaults to black."
+        },
+        {
+          "name": "overlayOpacity",
+          "type": "number",
+          "required": false,
+          "default": "50",
+          "doc": "Overlay opacity percentage (0–100) for the `overlay` layout. Defaults to 50."
+        },
+        {
+          "name": "sectionSpacing",
+          "type": "ImageWithTextSectionSpacing",
+          "required": false,
+          "values": [
+            "none",
+            "small",
+            "medium",
+            "large"
+          ],
+          "default": "medium",
+          "doc": "Vertical-only section padding preset (legacy `section_spacing`). Defaults to `medium` (legacy's own default). Horizontal padding stays the component's own fixed gutter — mirrors legacy's `py-*`-only spacing class (horizontal padding is a separate, non-`sectionSpacing` concern in the oracle)."
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "required": false,
+          "doc": "The body markup. Like `ImageWithTextProps.heading`, MUST be pre-sanitized by the caller — it renders via `dangerouslySetInnerHTML` (legacy parity: the body is a rich-text field, so bold/italic survives). The caller (`NexusImageWithTextAdapter`) routes it through the same C-1 `sanitizeMerchantHtml` allowlist as `heading`."
+        },
+        {
+          "name": "textColor",
+          "type": "string",
+          "required": false,
+          "doc": "Per-section body-text color override (resolved CSS color)."
+        },
+        {
+          "name": "textSize",
+          "type": "ImageWithTextTextSize",
+          "required": false,
+          "values": [
+            "s",
+            "m",
+            "l",
+            "xl"
+          ],
+          "default": "m",
+          "doc": "Body size preset (legacy `text_size`). Defaults to `m` (16px base / 18px desktop), mirroring `ImageWithTextProps.titleSize`."
+        },
+        {
+          "name": "titleSize",
+          "type": "ImageWithTextTitleSize",
+          "required": false,
+          "values": [
+            "s",
+            "m",
+            "l",
+            "xl"
+          ],
+          "default": "m",
+          "doc": "Heading size preset (legacy `title_size`). Defaults to `m` — legacy's own default, so a fresh, unconfigured insert renders at legacy's real responsive scale (24px base / 30px ≥48rem-container, see `TITLE_SIZE_REM`/`TITLE_SIZE_DESKTOP_REM`), never the browser's plain `<h2>` size."
+        }
+      ]
+    },
+    {
+      "name": "Input",
+      "summary": "A stateless, token-styled text field. Renders a native `<input>` (accessible + keyboard-operable by default), associated to its `label` by id. The value is controlled — `value` in, `onChange(next)` out — and all state edges (`error`/`success`/`disabled`/`readOnly`) are pure functions of props.",
+      "props": [
+        {
+          "name": "onChange",
+          "type": "(value: string) => void",
+          "required": true,
+          "doc": "Called with the next raw string on every keystroke. Behavior is fully delegated."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": true,
+          "doc": "Controlled value — the caller owns the text; this component holds no state."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "doc": "When `true`, the native `disabled` attr removes it from the tab order and blocks input."
+        },
+        {
+          "name": "helper",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Small helper/error text under the field; recolored to the error register when `state=\"error\"`. Wired to the field via `aria-describedby` (and announced as `role=\"alert\"` in the error state) so assistive tech reads the *message*, not just the generic invalid flag — provided the field has an `id` (from `label` or `id`); without one, the caller owns the association."
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "doc": "Explicit element id. Falls back to a slug of `label` so the `<label htmlFor>` stays wired."
+        },
+        {
+          "name": "label",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Visible label, associated to the control by `id`/`htmlFor`. Strongly recommended for an accessible name; when omitted, supply `id` + an external `<label>` or an `aria-label` via the caller."
+        },
+        {
+          "name": "leftIcon",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Optional leading glyph (e.g. an `<Icon>`), rendered inside the field on the left."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "doc": "When `true`, the field shows its value but is not editable (native `readOnly`)."
+        },
+        {
+          "name": "state",
+          "type": "InputState",
+          "required": false,
+          "values": [
+            "default",
+            "error",
+            "success"
+          ],
+          "default": "default",
+          "doc": "Validation register. Defaults to `default`."
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "required": false,
+          "default": "text",
+          "doc": "Native input type (`text`, `email`, `password`, …). Defaults to `text`."
+        }
+      ]
+    },
+    {
+      "name": "PageHeader",
+      "summary": "A stateless, token-styled page header. Pure function of props; the `action` slot is whatever the caller renders (a button, a link, a menu). Server-safe.",
+      "props": [
+        {
+          "name": "title",
+          "type": "ReactNode",
+          "required": true,
+          "doc": "The area title — rendered as the page `<h1>`."
+        },
+        {
+          "name": "action",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Optional right-aligned action slot (a rendered node — keeps this shell server-safe)."
+        },
+        {
+          "name": "description",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Optional secondary description under the title."
+        }
+      ]
+    },
+    {
+      "name": "Pagination",
+      "summary": "A stateless, token-styled paginator. Renders a `<nav>` with a prev control, the windowed page slots, and a next control. Numbered slots are `<a>` when `hrefForPage` is given, `<button>` when `onPageChange` is given (a page may supply both — href for progressive enhancement, onClick for the SPA path), and inert `<span>`s otherwise. Renders `null` for a single page.",
+      "props": [
+        {
+          "name": "page",
+          "type": "number",
+          "required": true,
+          "doc": "The active page (1-based). Clamped into `[1, pageCount]` for display."
+        },
+        {
+          "name": "pageCount",
+          "type": "number",
+          "required": true,
+          "doc": "Total number of pages (>= 1). When `<= 1` the component renders nothing."
+        },
+        {
+          "name": "hrefForPage",
+          "type": "(page: number) => string",
+          "required": false,
+          "doc": "Server-navigable slot — maps a page to an href. Its presence renders numbered `<a>`s."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "default": "Paginación",
+          "doc": "Accessible label for the nav landmark — localized by the caller (default `Paginación`)."
+        },
+        {
+          "name": "onPageChange",
+          "type": "(page: number) => void",
+          "required": false,
+          "doc": "Interactive slot — invoked with the target page. Its presence renders numbered `<button>`s."
+        },
+        {
+          "name": "siblingWindow",
+          "type": "number",
+          "required": false,
+          "default": "7",
+          "doc": "How many numbered slots to show around the current page. Defaults to `7`."
+        }
+      ]
+    },
+    {
+      "name": "RichText",
+      "summary": "A stateless rich-text block. Renders `children` when present (already-safe React nodes); otherwise the (caller-sanitized) `html` string via `dangerouslySetInnerHTML`. Honors the four legacy design settings and the `quote` layout, all driven from nexus tokens.",
+      "props": [
+        {
+          "name": "backgroundColor",
+          "type": "string",
+          "required": false,
+          "doc": "Section background. `'auto'`/absent leaves the section transparent (theme background shows through); any other value is applied verbatim as a CSS color (the caller already resolved it)."
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Optional already-safe React children, preferred over `html` when provided."
+        },
+        {
+          "name": "contentWidth",
+          "type": "RichTextContentWidth",
+          "required": false,
+          "values": [
+            "narrow",
+            "medium",
+            "wide",
+            "full"
+          ],
+          "doc": "Content-column max width preset. Defaults to `medium`."
+        },
+        {
+          "name": "html",
+          "type": "string",
+          "required": false,
+          "doc": "The rich-text markup. MUST be pre-sanitized by the caller before reaching this prop — it renders via `dangerouslySetInnerHTML` so merchant-authored formatting (headings, bold/italic, links) survives instead of being flattened to plain text."
+        },
+        {
+          "name": "layout",
+          "type": "RichTextLayout",
+          "required": false,
+          "values": [
+            "default",
+            "quote"
+          ],
+          "default": "default",
+          "doc": "Presentation layout — `default` (full-width text) or `quote` (accent blockquote)."
+        },
+        {
+          "name": "quoteAccentColor",
+          "type": "string",
+          "required": false,
+          "doc": "Quote-layout left-border accent. `'accent'`/absent falls back to the `--color-accent` token; any other value is applied verbatim as a CSS color. Ignored outside the `quote` layout."
+        },
+        {
+          "name": "sectionSpacing",
+          "type": "RichTextSectionSpacing",
+          "required": false,
+          "values": [
+            "none",
+            "small",
+            "medium",
+            "large"
+          ],
+          "doc": "Vertical section padding preset. Defaults to `medium`."
+        },
+        {
+          "name": "textColor",
+          "type": "string",
+          "required": false,
+          "doc": "Body text color. `'auto'`/absent falls back to the `--color-fg` token; any other value is applied verbatim as a CSS color."
+        }
+      ]
+    },
+    {
+      "name": "RowActionsMenu",
+      "summary": "A stateless-per-render kebab menu. Owns only its own open/closed toggle + focus management; every action is delegated to the caller's `onSelect`. Domain-ignorant: it never sees a tenant or capability.",
+      "props": [
+        {
+          "name": "items",
+          "type": "ReadonlyArray<RowAction>",
+          "required": true
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "default": "Acciones",
+          "doc": "Accessible label for the kebab trigger — localized by the caller (default `Acciones`)."
+        }
+      ]
+    },
+    {
+      "name": "SectionStack",
+      "summary": "The IR-driven paginated Section Stack carousel. Pure of domain — same `items` render the same view; the only state is UI-local (which slide is active + whether the viewer took manual control), which is legitimate view state, not domain/effect state (RFC-017).",
+      "props": [
+        {
+          "name": "items",
+          "type": "ReadonlyArray<SectionStackItem>",
+          "required": true,
+          "doc": "The slides, in the order the IR declares them. Empty → the component renders nothing."
+        },
+        {
+          "name": "autoPlayMs",
+          "type": "number",
+          "required": false,
+          "default": "0",
+          "doc": "Auto-rotate interval in ms (canon §3: 8–10s, slower than tabs). `0`/omitted disables auto-play — the component is then a pure manual carousel (deterministic for golden tests)."
+        }
+      ]
+    },
+    {
+      "name": "Select",
+      "summary": "A stateless, token-styled native `<select>`. Associated to its `label` by id, keyboard- and screen-reader-accessible by default. The value is controlled — `value` in, `onChange(next)` out.",
+      "props": [
+        {
+          "name": "onChange",
+          "type": "(value: string) => void",
+          "required": true,
+          "doc": "Called with the next option value on change. Behavior is fully delegated."
+        },
+        {
+          "name": "options",
+          "type": "readonly SelectOption[]",
+          "required": true,
+          "doc": "The options to render, as typed `{ value, label }` pairs (no bare-string shorthand — explicit)."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": true,
+          "doc": "Controlled selected value — the caller owns it; this component holds no state."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "doc": "When `true`, the native `disabled` attr removes it from the tab order and blocks selection."
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "doc": "Explicit element id. Falls back to a slug of `label` so the `<label htmlFor>` stays wired."
+        },
+        {
+          "name": "label",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Visible label, associated to the control by `id`/`htmlFor`. Strongly recommended for an accessible name; when omitted, supply `id` + an external `<label>` or an `aria-label` via the caller."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "doc": "Placeholder rendered as a disabled empty-value option (shown when `value === ''`)."
+        }
+      ]
+    },
+    {
+      "name": "SurfaceCard",
+      "summary": "A stateless, token-styled dashboard card. Renders a bordered white surface; when `title` is set it renders a `<header>` with a real heading (level `headingLevel`) plus the optional `headerAction`, then the `children` body, then the optional right-aligned `footer`. All styling flows from the DASHBOARD brand tokens; all behavior is delegated to the nodes the caller passes.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true,
+          "doc": "The card body."
+        },
+        {
+          "name": "elevated",
+          "type": "boolean",
+          "required": false,
+          "default": "true",
+          "doc": "Apply the dashboard system card shadow (`--shadow-dash-card`). Defaults to `true`."
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Optional footer slot for actions — laid out as a right-aligned row (a rendered node)."
+        },
+        {
+          "name": "headerAction",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Optional trailing header slot, aligned to the right of the title (e.g. an edit link or menu)."
+        },
+        {
+          "name": "headingLevel",
+          "type": "SurfaceCardHeadingLevel",
+          "required": false,
+          "values": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "default": "3",
+          "doc": "Heading level for `title`. Defaults to `3`."
+        },
+        {
+          "name": "padding",
+          "type": "SurfaceCardPadding",
+          "required": false,
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "lg",
+          "doc": "Inner padding. Defaults to `lg` (24px)."
+        },
+        {
+          "name": "size",
+          "type": "SurfaceCardSize",
+          "required": false,
+          "values": [
+            "md",
+            "lg"
+          ],
+          "default": "md",
+          "doc": "Corner radius. Defaults to `md` (10px)."
+        },
+        {
+          "name": "title",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Optional header title. When present, rendered as a heading (`headingLevel`, default `h3`)."
+        }
+      ]
+    },
+    {
+      "name": "Switch",
+      "summary": "A stateless, token-styled switch. Renders a native `<button role=\"switch\" aria-checked>` (focusable, Enter/Space-operable for free) beside an optional label. The state is controlled — `checked` in, `onCheckedChange(next)` out. Provide `label` (string) or `ariaLabel` for the accessible name.",
+      "props": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "required": true,
+          "doc": "Controlled on/off state — the caller owns it; this component holds no state."
+        },
+        {
+          "name": "onCheckedChange",
+          "type": "(checked: boolean) => void",
+          "required": true,
+          "doc": "Called with the next boolean on activation (click or Enter/Space). Behavior is delegated."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "required": false,
+          "doc": "Explicit accessible name for the switch, overriding the string `label`. Required when neither is a string."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "doc": "When `true`, the native `disabled` attr removes it from the tab order and blocks toggling."
+        },
+        {
+          "name": "label",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Visible label text beside the toggle. Also drives the accessible name via `aria-label`."
+        }
+      ]
+    },
+    {
+      "name": "T1FinalCTA",
+      "summary": "`<T1FinalCTA>` — renders the human-avatars final CTA from its IR slice. Stateless and total: an empty `avatars` array renders the enterprise/counter-style close (canon `LANDING-SECTIONS.md:1316`) without the row; a missing `description` simply omits the line. Routing is delegated via `onAction`.",
+      "props": [
+        {
+          "name": "slice",
+          "type": "T1FinalCTASlice",
+          "required": true
+        },
+        {
+          "name": "onAction",
+          "type": "(action: FinalCtaAction) => void",
+          "required": false,
+          "doc": "Invoked with the activated CTA so the host owns navigation (the section never embeds a route literal)."
+        }
+      ]
+    },
+    {
+      "name": "T1LifestyleCards",
+      "summary": "The lifestyle section — variant *3 human-photo profiles*. Renders exactly `slice.cards` in their IR-declared order; an empty `cards` array renders the heading with no grid (a total function — the section never invents a card the slice did not declare).",
+      "props": [
+        {
+          "name": "slice",
+          "type": "LifestyleSectionSlice",
+          "required": true,
+          "doc": "The projected IR slice. All rendered content comes from here."
+        }
+      ]
+    },
+    {
+      "name": "Tabs",
+      "summary": "A stateless, token-styled tab bar implementing the WAI-ARIA tabs pattern. Selection is controlled — `activeId` in, `onSelect(nextId)` out. Click, Arrow-Left/Right, and Home/End all move selection via the callback; when tabs carry `content`, the active panel renders below, labelled by its header.",
+      "props": [
+        {
+          "name": "activeId",
+          "type": "string",
+          "required": true,
+          "doc": "Controlled active tab id — the caller owns it; this component holds no state."
+        },
+        {
+          "name": "onSelect",
+          "type": "(id: string) => void",
+          "required": true,
+          "doc": "Called with the next tab id on click or keyboard navigation. Behavior is fully delegated."
+        },
+        {
+          "name": "tabs",
+          "type": "readonly TabItem[]",
+          "required": true,
+          "doc": "The tabs to render, in order."
+        }
+      ]
+    },
+    {
+      "name": "Tag",
+      "summary": "A stateless, token-styled chip. Renders a `<span>`; when `onRemove` is provided it appends an accessible remove `<button>` (`aria-label={removeLabel}`). All behavior is delegated via props.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "onRemove",
+          "type": "() => void",
+          "required": false,
+          "doc": "When provided, renders an accessible remove (`×`) control and calls this on activation."
+        },
+        {
+          "name": "removeLabel",
+          "type": "string",
+          "required": false,
+          "default": "Quitar",
+          "doc": "Accessible label for the remove control — localized by the caller (default `Quitar`)."
+        },
+        {
+          "name": "selected",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "doc": "Selected chips use the brand-red register; the default is neutral gray."
+        }
+      ]
+    },
+    {
+      "name": "Textarea",
+      "summary": "A stateless, token-styled multi-line text field. Renders a native `<textarea>` (accessible + keyboard-operable by default), associated to its `label` by id. The value is controlled — `value` in, `onChange(next)` out — and all state edges (`error`/`success`/`disabled`/`readOnly`) are pure functions of props.",
+      "props": [
+        {
+          "name": "onChange",
+          "type": "(value: string) => void",
+          "required": true,
+          "doc": "Called with the next raw string on every keystroke. Behavior is fully delegated."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": true,
+          "doc": "Controlled value — the caller owns the text; this component holds no state."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "doc": "When `true`, the native `disabled` attr removes it from the tab order and blocks input."
+        },
+        {
+          "name": "helper",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Small helper/error text under the field; recolored to the error register when `state=\"error\"`. Wired to the field via `aria-describedby` (and announced as `role=\"alert\"` in the error state) so assistive tech reads the *message*, not just the generic invalid flag — provided the field has an `id` (from `label` or `id`); without one, the caller owns the association."
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "doc": "Explicit element id. Falls back to a slug of `label` so the `<label htmlFor>` stays wired."
+        },
+        {
+          "name": "label",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Visible label, associated to the control by `id`/`htmlFor`. Strongly recommended for an accessible name; when omitted, supply `id` + an external `<label>` or an `aria-label` via the caller."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "doc": "When `true`, the field shows its value but is not editable (native `readOnly`)."
+        },
+        {
+          "name": "rows",
+          "type": "number",
+          "required": false,
+          "default": "4",
+          "doc": "Visible row count (native `rows`). Defaults to `4`."
+        },
+        {
+          "name": "state",
+          "type": "InputState",
+          "required": false,
+          "values": [
+            "default",
+            "error",
+            "success"
+          ],
+          "default": "default",
+          "doc": "Validation register. Defaults to `default`."
+        }
+      ]
+    },
+    {
+      "name": "Toast",
+      "summary": "A single toast. Stateless w.r.t. its queue position (the `ToastProvider` owns the stack); it owns only its own enter transition + auto-dismiss timer. Renders `<Alert>` as the live region and, when `action` is present, a Nexus `<Button>` beneath the message.",
+      "props": [
+        {
+          "name": "message",
+          "type": "ReactNode",
+          "required": true,
+          "doc": "The toast body — user-facing copy (localized by the caller)."
+        },
+        {
+          "name": "action",
+          "type": "ToastAction",
+          "required": false,
+          "doc": "Optional call-to-action; its presence pins the toast open (no auto-dismiss)."
+        },
+        {
+          "name": "dismissLabel",
+          "type": "string",
+          "required": false,
+          "default": "Cerrar",
+          "doc": "Accessible label for the dismiss control — localized by the caller (default `Cerrar`)."
+        },
+        {
+          "name": "durationMs",
+          "type": "number | null",
+          "required": false,
+          "doc": "Auto-dismiss override in ms. `undefined` ⇒ the severity/action default; a positive number ⇒ that timeout; `null`/`0`/negative ⇒ persist. See `resolveToastDurationMs`."
+        },
+        {
+          "name": "icon",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Optional leading icon element, tinted to the variant's border color (forwarded to `<Alert>`)."
+        },
+        {
+          "name": "onDismiss",
+          "type": "() => void",
+          "required": false,
+          "doc": "Dismiss handler — wires the `×` control, `Escape`, and auto-dismiss."
+        },
+        {
+          "name": "severity",
+          "type": "ToastSeverity",
+          "required": false,
+          "values": [
+            "success",
+            "warning",
+            "error",
+            "info"
+          ],
+          "default": "info",
+          "doc": "The semantic severity. Defaults to `info`."
+        },
+        {
+          "name": "title",
+          "type": "ReactNode",
+          "required": false,
+          "doc": "Optional bold title above the message (forwarded to `<Alert>`)."
+        }
+      ]
+    },
+    {
+      "name": "ToastProvider",
+      "summary": "Provide the toast API to a subtree and render the portaled viewport. State (the live stack) lives here; individual `Toast`s own their own timer + transition.",
+      "props": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "required": true
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "default": "Notificaciones",
+          "doc": "Accessible label for the toast viewport region — localized by the caller (default `Notificaciones`)."
+        },
+        {
+          "name": "maxVisible",
+          "type": "number",
+          "required": false,
+          "default": "3",
+          "doc": "Max toasts visible at once; excess is dropped FIFO (oldest first). Defaults to 3."
+        }
+      ]
+    }
+  ],
+  "types": {
+    "AlertVariant": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Alert.tsx",
+      "declaration": "export type AlertVariant = 'success' | 'warning' | 'error' | 'info';"
+    },
+    "AlertProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Alert.tsx",
+      "declaration": "export interface AlertProps {\n  readonly children: ReactNode;\n  /** Optional bold title above the body. */\n  readonly title?: ReactNode;\n  /** The semantic severity. Defaults to `info`. */\n  readonly variant?: AlertVariant;\n  /** Optional leading icon element, tinted to the variant's border color. */\n  readonly icon?: ReactNode;\n  /** When provided, renders an accessible dismiss (`×`) control and calls this on activation. */\n  readonly onClose?: () => void;\n  /** Accessible label for the dismiss control — localized by the caller (default `Cerrar`). */\n  readonly closeLabel?: string;\n  /** Optional explicit live-region politeness, forwarded to the root element. The `role` (alert vs status) already carries an */\n  readonly 'aria-live'?: 'assertive' | 'polite' | 'off';\n  /** Optional explicit `aria-atomic`, forwarded to the root element (announce the whole region). */\n  readonly 'aria-atomic'?: boolean;\n}"
+    },
+    "AnnouncementBarProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/AnnouncementBar.tsx",
+      "declaration": "export interface AnnouncementBarProps {\n  readonly text: string;\n}"
+    },
+    "AvatarShape": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Avatar.tsx",
+      "declaration": "export type AvatarShape = 'circle' | 'rounded';"
+    },
+    "AvatarProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Avatar.tsx",
+      "declaration": "export interface AvatarProps {\n  /** Image URL. When present it renders as the avatar; otherwise initials are derived from `name`. */\n  readonly src?: string;\n  /** Display name — drives the initials fallback (first two words) and the hover `title`/`alt`. */\n  readonly name?: string;\n  /** Pixel diameter/side. Defaults to 36. The initials font scales to 40% of this. */\n  readonly size?: number;\n  /** Outline shape. Defaults to `circle`. */\n  readonly shape?: AvatarShape;\n}"
+    },
+    "BadgeTone": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Badge.tsx",
+      "declaration": "export type BadgeTone =\n  | 'success'\n  | 'warning'\n  | 'caution'\n  | 'error'\n  | 'info'\n  | 'neutral'\n  | 'premium'\n  | 'ai';"
+    },
+    "BadgeProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Badge.tsx",
+      "declaration": "export interface BadgeProps {\n  readonly children: ReactNode;\n  /** The semantic status. Defaults to `neutral`. */\n  readonly tone?: BadgeTone;\n  /** When `true`, renders a small leading dot in the tone's accent color. */\n  readonly dot?: boolean;\n}"
+    },
+    "BannerLayout": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Banner.tsx",
+      "declaration": "export type BannerLayout = 'centered' | 'split-left' | 'split-right';"
+    },
+    "BannerHeight": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Banner.tsx",
+      "declaration": "export type BannerHeight = 'small' | 'medium' | 'large' | 'fullscreen';"
+    },
+    "BannerCta": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Banner.tsx",
+      "declaration": "export interface BannerCta {\n  /** The CTA label markup. MUST be pre-sanitized by the caller — it renders via `dangerouslySetInnerHTML` (legacy parity: the */\n  readonly label: string;\n  /** The destination. MUST be pre-sanitized by the caller (`sanitizeHref`). */\n  readonly href: string;\n}"
+    },
+    "BannerProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Banner.tsx",
+      "declaration": "export interface BannerProps {\n  /** Body copy. MUST be pre-sanitized by the caller — it renders via `dangerouslySetInnerHTML` (legacy parity: the oracle ren */\n  readonly text: string;\n  /** Optional background/column image URL. MUST be pre-sanitized (`sanitizeHref`) by the caller. */\n  readonly image?: string;\n  /** Accessible name for the image; when absent the image is decorative (`aria-hidden`). */\n  readonly imageAlt?: string;\n  /** Optional distinct headline. MUST be pre-sanitized by the caller — it renders via `dangerouslySetInnerHTML` so a merchant */\n  readonly heading?: string;\n  /** Primary call-to-action (accent-filled button). Its `label`/`href` MUST be pre-sanitized. */\n  readonly cta?: BannerCta;\n  /** Optional secondary call-to-action (outlined button). Its `label`/`href` MUST be pre-sanitized. */\n  readonly secondaryCta?: BannerCta;\n  /** Layout variant. Defaults to `centered`. */\n  readonly layout?: BannerLayout;\n  /** Height preset. Defaults to `medium`. */\n  readonly height?: BannerHeight;\n  /** Overlay darkness over a background image, 0–100 (centered layout only). Defaults to 40. */\n  readonly overlayOpacity?: number;\n  /** Overlay tint (centered layout only). Defaults to `black`. */\n  readonly overlayColor?: BannerOverlayColor;\n  /** Text-color derivation mode. Defaults to `auto` (derive from overlay/layout). */\n  readonly textColorMode?: BannerTextColorMode;\n  /** Heading size preset. Defaults to `m`. */\n  readonly titleSize?: BannerTitleSize;\n  /** Body size preset. Defaults to `m`. */\n  readonly textSize?: BannerTextSize;\n  /** Outer block margin rhythm. Defaults to `none`. */\n  readonly sectionSpacing?: BannerSpacing;\n  /** Content-stack gap. Defaults to `medium`. */\n  readonly contentSpacing?: BannerSpacing;\n  /** Centered-layout content max-width. Defaults to `7xl`. */\n  readonly containerWidth?: BannerContainerWidth;\n  /** Content-block position. Defaults to `auto` (layout default). */\n  readonly contentAlignment?: BannerContentAlignment;\n  /** Text alignment within the block. Unset ⇒ follows the (effective) content alignment. */\n  readonly textAlignment?: BannerTextAlignment;\n  /** Vertical anchoring (centered layout only). Defaults to `center`. */\n  readonly verticalPosition?: BannerVerticalPosition;\n  /** Per-field background color override (resolved CSS color). Unset = the layout default. */\n  readonly backgroundColor?: string;\n  /** Per-field heading color override (resolved CSS color). Unset = the derived text color. */\n  readonly headingColor?: string;\n  /** Per-field body color override (resolved CSS color). Unset = the derived text color. */\n  readonly textColor?: string;\n  /** Per-field CTA background color override (resolved CSS color). Unset = the accent token. */\n  readonly ctaBackgroundColor?: string;\n  /** Per-field CTA text color override (resolved CSS color). Unset = the bg token. */\n  readonly ctaTextColor?: string;\n  /** Image focal point (`object-position`). Defaults to centered (50/50). */\n  readonly imagePosition?: BannerImagePosition;\n  /** The per-field `backgroundColor` RESOLVED to a concrete `#rrggbb` by the caller (`NexusBannerAdapter`), used ONLY for the */\n  readonly backgroundColorHex?: string;\n  /** The per-field `ctaBackgroundColor` RESOLVED to a concrete `#rrggbb` by the caller, used ONLY to derive the primary-CTA L */\n  readonly ctaBackgroundColorHex?: string;\n}"
+    },
+    "ButtonVariant": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Button.tsx",
+      "declaration": "export type ButtonVariant = 'primary' | 'secondary';"
+    },
+    "ButtonProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Button.tsx",
+      "declaration": "export interface ButtonProps {\n  readonly children: ReactNode;\n  readonly onClick?: () => void;\n  readonly variant?: ButtonVariant;\n  /** When `true`, the button is genuinely inert: the native `disabled` attribute removes it from the tab order and blocks act */\n  readonly disabled?: boolean;\n}"
+    },
+    "CheckboxProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Checkbox.tsx",
+      "declaration": "export interface CheckboxProps {\n  /** Controlled checked state — the caller owns it; this component holds no state. */\n  readonly checked: boolean;\n  /** Called with the next boolean on toggle. Behavior is fully delegated. */\n  readonly onCheckedChange: (checked: boolean) => void;\n  /** Visible label text, associated to the box by id. Recommended for an accessible name. */\n  readonly label?: ReactNode;\n  /** Explicit element id. Falls back to a slug of `label` so the `<label htmlFor>` stays wired. */\n  readonly id?: string;\n  /** Mixed/partial visual register (the dash). Paints as filled + exposes `aria-checked=\"mixed\"`. Note: toggling a mixed box  */\n  readonly indeterminate?: boolean;\n  /** When `true`, the native `disabled` attr removes it from the tab order and blocks toggling. */\n  readonly disabled?: boolean;\n}"
+    },
+    "CollageTile": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Collage.tsx",
+      "declaration": "export interface CollageTile {\n  readonly image?: string;\n  readonly heading?: string;\n  readonly href?: string;\n}"
+    },
+    "CollageProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Collage.tsx",
+      "declaration": "export interface CollageProps {\n  /** Optional section heading rendered above the tile grid. */\n  readonly heading?: string;\n  /** The tiles to render. An empty array renders an empty, inert grid (never throws). */\n  readonly blocks: readonly CollageTile[];\n  /** Desktop column count; clamped to at least 1. Defaults to 3. */\n  readonly columns?: number;\n}"
+    },
+    "ColumnAlign": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/DataTable.tsx",
+      "declaration": "export type ColumnAlign = 'left' | 'right' | 'center';"
+    },
+    "SortDirection": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/DataTable.tsx",
+      "declaration": "export type SortDirection = 'asc' | 'desc';"
+    },
+    "DataTableColumn": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/DataTable.tsx",
+      "declaration": "export interface DataTableColumn<T> {\n  /** Stable identity — the `aria-sort`/`onSort` key and the React key for the header cell. */\n  readonly key: string;\n  /** The header content. */\n  readonly header: ReactNode;\n  /** Cell renderer. Defaults to the row's value at `key` when the row is an index signature. */\n  readonly render?: (row: T) => ReactNode;\n  /** When `true` and `onSort` is wired, the header becomes a sort `<button>`. */\n  readonly sortable?: boolean;\n  /** Column alignment. Defaults to `left`. */\n  readonly align?: ColumnAlign;\n}"
+    },
+    "DataTableProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/DataTable.tsx",
+      "declaration": "export interface DataTableProps<T> {\n  readonly columns: ReadonlyArray<DataTableColumn<T>>;\n  readonly rows: ReadonlyArray<T>;\n  /** Stable per-row key (never the array index). */\n  readonly rowKey: (row: T) => string | number;\n  /** Rendered (spanning every column) when `rows` is empty — compose a Nexus `<EmptyState>`. */\n  readonly empty?: ReactNode;\n  /** Sort handler. Its presence turns `sortable` headers into buttons. */\n  readonly onSort?: (key: string) => void;\n  /** The currently sorted column + direction — drives `aria-sort` and the indicator. */\n  readonly sort?: { readonly key: string; readonly direction: SortDirection };\n  /** Optional visually-hidden `<caption>` for the table's accessible name. */\n  readonly caption?: ReactNode;\n}"
+    },
+    "DialogVariant": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Dialog.tsx",
+      "declaration": "export type DialogVariant = 'modal' | 'drawer';"
+    },
+    "DialogProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Dialog.tsx",
+      "declaration": "export interface DialogProps {\n  /** Whether the dialog is mounted + visible. When `false`, renders `null` (nothing in the DOM). */\n  readonly open: boolean;\n  /** Invoked by the backdrop click, the `Escape` key, and the built-in close control. */\n  readonly onClose: () => void;\n  /** The accessible title — becomes the heading and the `aria-labelledby` target. */\n  readonly title: ReactNode;\n  /** The dialog body (a form, a confirmation message, …). */\n  readonly children: ReactNode;\n  /** Optional footer region for actions (e.g. Cancel / Save), pinned below the body. */\n  readonly footer?: ReactNode;\n  /** `modal` (centered card, default) or `drawer` (right side sheet). */\n  readonly variant?: DialogVariant;\n  /** Accessible label for the built-in close control — localized by the caller (default `Cerrar`). */\n  readonly closeLabel?: string;\n}"
+    },
+    "EmptyStateProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/EmptyState.tsx",
+      "declaration": "export interface EmptyStateProps {\n  /** Optional decorative glyph above the title (e.g. an `<Icon>`). Rendered `aria-hidden`. */\n  readonly icon?: ReactNode;\n  /** The primary line — what is empty / what to do. Carries the accessible meaning. */\n  readonly title: ReactNode;\n  /** Optional secondary explanatory line. */\n  readonly body?: ReactNode;\n  /** Optional call-to-action slot (a rendered node — keeps this component server-safe). */\n  readonly action?: ReactNode;\n}"
+    },
+    "FallbackImageProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/FallbackImage.tsx",
+      "declaration": "export interface FallbackImageProps {\n  /** The image URL. */\n  readonly src: string;\n  /** Accessible name; pass `''` + `ariaHidden` for a decorative image. */\n  readonly alt: string;\n  /** Mark the image decorative (`aria-hidden`) when it carries no accessible name. */\n  readonly ariaHidden?: boolean;\n  /** Inline styles applied to the `<img>`. */\n  readonly style?: CSSProperties;\n  /** Rendered INSTEAD of the `<img>` when `src` fails to load. Default: nothing (the caller's own placeholder/background show */\n  readonly fallback?: ReactNode;\n}"
+    },
+    "HeroProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Hero.tsx",
+      "declaration": "export interface HeroProps {\n  readonly heading: string;\n  readonly subheading?: string;\n  readonly ctaLabel?: string;\n  readonly onCta?: () => void;\n  readonly image?: string;\n}"
+    },
+    "IconProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Icon.tsx",
+      "declaration": "export interface IconProps {\n  /** The SVG `viewBox` for the supplied glyph (e.g. `\"0 0 24 24\"`). */\n  readonly viewBox: string;\n  /** The glyph's inner SVG markup (`<path .../>`, `<g>…`, …) as a raw string. Rendered verbatim into the `<svg>`; the caller  */\n  readonly path: string;\n  /** Pixel width/height (square). Defaults to 24. */\n  readonly size?: number;\n  /** Accessible name. When provided, the glyph is exposed to AT as `role=\"img\"` with this `aria-label`; when omitted, the gly */\n  readonly label?: string;\n}"
+    },
+    "IconButtonVariant": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/IconButton.tsx",
+      "declaration": "export type IconButtonVariant = 'ghost' | 'outline' | 'primary';"
+    },
+    "IconButtonSize": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/IconButton.tsx",
+      "declaration": "export type IconButtonSize = 'sm' | 'md' | 'lg';"
+    },
+    "IconButtonProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/IconButton.tsx",
+      "declaration": "export interface IconButtonProps {\n  /** The glyph to render — typically an `<Icon>` element. */\n  readonly children: ReactNode;\n  /** REQUIRED accessible name. An icon-only button carries no text, so this becomes its `aria-label` — localized by the calle */\n  readonly label: string;\n  readonly onClick?: () => void;\n  readonly variant?: IconButtonVariant;\n  readonly size?: IconButtonSize;\n  /** When `true`, the button is genuinely inert: the native `disabled` attribute removes it from the tab order and blocks act */\n  readonly disabled?: boolean;\n}"
+    },
+    "ImageSide": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/ImageWithText.tsx",
+      "declaration": "export type ImageSide = 'start' | 'end';"
+    },
+    "ImageWithTextLayout": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/ImageWithText.tsx",
+      "declaration": "export type ImageWithTextLayout = 'split' | 'stacked' | 'stacked-reverse' | 'overlay';"
+    },
+    "ImageWithTextAlignment": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/ImageWithText.tsx",
+      "declaration": "export type ImageWithTextAlignment = 'start' | 'center' | 'end';"
+    },
+    "ImageWithTextSectionSpacing": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/ImageWithText.tsx",
+      "declaration": "export type ImageWithTextSectionSpacing = 'none' | 'small' | 'medium' | 'large';"
+    },
+    "ImageWithTextTitleSize": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/ImageWithText.tsx",
+      "declaration": "export type ImageWithTextTitleSize = 's' | 'm' | 'l' | 'xl';"
+    },
+    "ImageWithTextTextSize": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/ImageWithText.tsx",
+      "declaration": "export type ImageWithTextTextSize = 's' | 'm' | 'l' | 'xl';"
+    },
+    "ImageFocalPoint": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/ImageWithText.tsx",
+      "declaration": "export interface ImageFocalPoint {\n  readonly x: number;\n  readonly y: number;\n}"
+    },
+    "ImageWithTextProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/ImageWithText.tsx",
+      "declaration": "export interface ImageWithTextProps {\n  readonly image?: string;\n  /** The heading markup. MUST be pre-sanitized by the caller before reaching this prop — it renders via `dangerouslySetInnerH */\n  readonly heading?: string;\n  /** The body markup. Like {@link ImageWithTextProps.heading}, MUST be pre-sanitized by the caller — it renders via `dangerou */\n  readonly text?: string;\n  readonly ctaLabel?: string;\n  /** A destination the CTA navigates to. When supplied (and non-empty), the CTA renders as a real `<a href>` (legacy parity:  */\n  readonly ctaHref?: string;\n  readonly onCta?: () => void;\n  /** Which column the image sits in (for the `split` layout). Defaults to `start`. */\n  readonly imageSide?: ImageSide;\n  /** The image/text presentation. Defaults to `split`. */\n  readonly layout?: ImageWithTextLayout;\n  /** Image focal point (`object-position`); defaults to centered (50/50). */\n  readonly focalPoint?: ImageFocalPoint;\n  /** How the text-column content aligns. Defaults to `start`. */\n  readonly contentAlignment?: ImageWithTextAlignment;\n  /** Gap between the image and text columns, in px. Defaults to the token `calc(var(--space) 2)`. */\n  readonly columnGapPx?: number;\n  /** The section's inner max content width, in px. Unset = full width (token behavior). */\n  readonly maxWidthPx?: number;\n  /** Per-section background color override (resolved CSS color). Unset = the token/transparent default. */\n  readonly backgroundColor?: string;\n  /** Per-section heading color override (resolved CSS color). */\n  readonly headingColor?: string;\n  /** Per-section body-text color override (resolved CSS color). */\n  readonly textColor?: string;\n  /** Per-section CTA background color override (resolved CSS color). */\n  readonly ctaBackgroundColor?: string;\n  /** Per-section CTA text color override (resolved CSS color). */\n  readonly ctaTextColor?: string;\n  /** Overlay tint color for the `overlay` layout (resolved CSS color). Defaults to black. */\n  readonly overlayColor?: string;\n  /** Overlay opacity percentage (0–100) for the `overlay` layout. Defaults to 50. */\n  readonly overlayOpacity?: number;\n  /** Heading size preset (legacy `title_size`). Defaults to `m` — legacy's own default, so a fresh, unconfigured insert rende */\n  readonly titleSize?: ImageWithTextTitleSize;\n  /** Body size preset (legacy `text_size`). Defaults to `m` (16px base / 18px desktop), mirroring {@link ImageWithTextProps.t */\n  readonly textSize?: ImageWithTextTextSize;\n  /** Vertical-only section padding preset (legacy `section_spacing`). Defaults to `medium` (legacy's own default). Horizontal */\n  readonly sectionSpacing?: ImageWithTextSectionSpacing;\n  /** A fixed image-column pixel height. The real legacy oracle sizes this figure by a FIXED PIXEL HEIGHT (keyed by the sectio */\n  readonly imageHeightPx?: number;\n}"
+    },
+    "InputState": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Input.tsx",
+      "declaration": "export type InputState = 'default' | 'error' | 'success';"
+    },
+    "InputProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Input.tsx",
+      "declaration": "export interface InputProps {\n  /** Controlled value — the caller owns the text; this component holds no state. */\n  readonly value: string;\n  /** Called with the next raw string on every keystroke. Behavior is fully delegated. */\n  readonly onChange: (value: string) => void;\n  /** Visible label, associated to the control by `id`/`htmlFor`. Strongly recommended for an accessible name; when omitted, s */\n  readonly label?: ReactNode;\n  /** Explicit element id. Falls back to a slug of `label` so the `<label htmlFor>` stays wired. */\n  readonly id?: string;\n  readonly placeholder?: string;\n  /** Small helper/error text under the field; recolored to the error register when `state=\"error\"`. Wired to the field via `a */\n  readonly helper?: ReactNode;\n  /** Validation register. Defaults to `default`. */\n  readonly state?: InputState;\n  /** Native input type (`text`, `email`, `password`, …). Defaults to `text`. */\n  readonly type?: string;\n  /** When `true`, the native `disabled` attr removes it from the tab order and blocks input. */\n  readonly disabled?: boolean;\n  /** When `true`, the field shows its value but is not editable (native `readOnly`). */\n  readonly readOnly?: boolean;\n  /** Optional leading glyph (e.g. an `<Icon>`), rendered inside the field on the left. */\n  readonly leftIcon?: ReactNode;\n}"
+    },
+    "PageHeaderProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/PageHeader.tsx",
+      "declaration": "export interface PageHeaderProps {\n  /** The area title — rendered as the page `<h1>`. */\n  readonly title: ReactNode;\n  /** Optional secondary description under the title. */\n  readonly description?: ReactNode;\n  /** Optional right-aligned action slot (a rendered node — keeps this shell server-safe). */\n  readonly action?: ReactNode;\n}"
+    },
+    "PageSlot": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Pagination.tsx",
+      "declaration": "export type PageSlot = number | typeof PAGE_ELLIPSIS;"
+    },
+    "PaginationProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Pagination.tsx",
+      "declaration": "export interface PaginationProps {\n  /** The active page (1-based). Clamped into `[1, pageCount]` for display. */\n  readonly page: number;\n  /** Total number of pages (>= 1). When `<= 1` the component renders nothing. */\n  readonly pageCount: number;\n  /** Interactive slot — invoked with the target page. Its presence renders numbered `<button>`s. */\n  readonly onPageChange?: (page: number) => void;\n  /** Server-navigable slot — maps a page to an href. Its presence renders numbered `<a>`s. */\n  readonly hrefForPage?: (page: number) => string;\n  /** Accessible label for the nav landmark — localized by the caller (default `Paginación`). */\n  readonly label?: string;\n  /** How many numbered slots to show around the current page. Defaults to `7`. */\n  readonly siblingWindow?: number;\n}"
+    },
+    "RichTextSectionSpacing": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/RichText.tsx",
+      "declaration": "export type RichTextSectionSpacing = 'none' | 'small' | 'medium' | 'large';"
+    },
+    "RichTextContentWidth": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/RichText.tsx",
+      "declaration": "export type RichTextContentWidth = 'narrow' | 'medium' | 'wide' | 'full';"
+    },
+    "RichTextLayout": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/RichText.tsx",
+      "declaration": "export type RichTextLayout = 'default' | 'quote';"
+    },
+    "RichTextProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/RichText.tsx",
+      "declaration": "export interface RichTextProps {\n  /** The rich-text markup. MUST be pre-sanitized by the caller before reaching this prop — it renders via `dangerouslySetInne */\n  readonly html?: string;\n  /** Optional already-safe React children, preferred over `html` when provided. */\n  readonly children?: ReactNode;\n  /** Presentation layout — `default` (full-width text) or `quote` (accent blockquote). */\n  readonly layout?: RichTextLayout;\n  /** Vertical section padding preset. Defaults to `medium`. */\n  readonly sectionSpacing?: RichTextSectionSpacing;\n  /** Content-column max width preset. Defaults to `medium`. */\n  readonly contentWidth?: RichTextContentWidth;\n  /** Section background. `'auto'`/absent leaves the section transparent (theme background shows through); any other value is  */\n  readonly backgroundColor?: string;\n  /** Body text color. `'auto'`/absent falls back to the `--color-fg` token; any other value is applied verbatim as a CSS colo */\n  readonly textColor?: string;\n  /** Quote-layout left-border accent. `'accent'`/absent falls back to the `--color-accent` token; any other value is applied  */\n  readonly quoteAccentColor?: string;\n}"
+    },
+    "RowActionTone": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/RowActionsMenu.tsx",
+      "declaration": "export type RowActionTone = 'default' | 'danger';"
+    },
+    "RowAction": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/RowActionsMenu.tsx",
+      "declaration": "export interface RowAction {\n  /** The visible label — user-facing copy (localized by the caller). */\n  readonly label: string;\n  /** Invoked on activation; the menu closes immediately afterward. */\n  readonly onSelect: () => void;\n  /** Semantic tone. Defaults to `default`. */\n  readonly tone?: RowActionTone;\n  /** When `true`, the item is inert (native `disabled`); `onSelect` is not called. */\n  readonly disabled?: boolean;\n}"
+    },
+    "RowActionsMenuProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/RowActionsMenu.tsx",
+      "declaration": "export interface RowActionsMenuProps {\n  readonly items: ReadonlyArray<RowAction>;\n  /** Accessible label for the kebab trigger — localized by the caller (default `Acciones`). */\n  readonly label?: string;\n}"
+    },
+    "SectionStackItem": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/SectionStack.tsx",
+      "declaration": "export interface SectionStackItem {\n  /** Stable key for the slide (e.g. the IR capability/route id). Used for React keys + a11y ids. */\n  readonly id: string;\n  /** Slide title (Sora, stands alone — no eyebrow). Comes from the IR content slice. */\n  readonly title: string;\n  /** 1–2 line description (Inter). Optional — omitted slides simply render no paragraph. */\n  readonly description?: string;\n  /** CTA label (e.g. \"Conoce T1tienda\"). The CTA renders only when a label is supplied. */\n  readonly ctaLabel?: string;\n  /** CTA handler — behavior is delegated; the component owns no navigation. */\n  readonly onCta?: () => void;\n  /** The right-column visual (mockup/media). A node so the caller supplies IR-referenced media. */\n  readonly visual?: ReactNode;\n}"
+    },
+    "SectionStackProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/SectionStack.tsx",
+      "declaration": "export interface SectionStackProps {\n  /** The slides, in the order the IR declares them. Empty → the component renders nothing. */\n  readonly items: ReadonlyArray<SectionStackItem>;\n  /** Auto-rotate interval in ms (canon §3: 8–10s, slower than tabs). `0`/omitted disables auto-play — the component is then a */\n  readonly autoPlayMs?: number;\n}"
+    },
+    "SelectOption": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Select.tsx",
+      "declaration": "export interface SelectOption {\n  readonly value: string;\n  readonly label: string;\n}"
+    },
+    "SelectProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Select.tsx",
+      "declaration": "export interface SelectProps {\n  /** Controlled selected value — the caller owns it; this component holds no state. */\n  readonly value: string;\n  /** Called with the next option value on change. Behavior is fully delegated. */\n  readonly onChange: (value: string) => void;\n  /** The options to render, as typed `{ value, label }` pairs (no bare-string shorthand — explicit). */\n  readonly options: readonly SelectOption[];\n  /** Visible label, associated to the control by `id`/`htmlFor`. Strongly recommended for an accessible name; when omitted, s */\n  readonly label?: ReactNode;\n  /** Explicit element id. Falls back to a slug of `label` so the `<label htmlFor>` stays wired. */\n  readonly id?: string;\n  /** Placeholder rendered as a disabled empty-value option (shown when `value === ''`). */\n  readonly placeholder?: string;\n  /** When `true`, the native `disabled` attr removes it from the tab order and blocks selection. */\n  readonly disabled?: boolean;\n}"
+    },
+    "SurfaceCardSize": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/SurfaceCard.tsx",
+      "declaration": "export type SurfaceCardSize = 'md' | 'lg';"
+    },
+    "SurfaceCardPadding": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/SurfaceCard.tsx",
+      "declaration": "export type SurfaceCardPadding = 'sm' | 'md' | 'lg';"
+    },
+    "SurfaceCardHeadingLevel": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/SurfaceCard.tsx",
+      "declaration": "export type SurfaceCardHeadingLevel = 2 | 3 | 4 | 5 | 6;"
+    },
+    "SurfaceCardProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/SurfaceCard.tsx",
+      "declaration": "export interface SurfaceCardProps {\n  /** The card body. */\n  readonly children: ReactNode;\n  /** Optional header title. When present, rendered as a heading (`headingLevel`, default `h3`). */\n  readonly title?: ReactNode;\n  /** Heading level for {@link title}. Defaults to `3`. */\n  readonly headingLevel?: SurfaceCardHeadingLevel;\n  /** Optional trailing header slot, aligned to the right of the title (e.g. an edit link or menu). */\n  readonly headerAction?: ReactNode;\n  /** Optional footer slot for actions — laid out as a right-aligned row (a rendered node). */\n  readonly footer?: ReactNode;\n  /** Corner radius. Defaults to `md` (10px). */\n  readonly size?: SurfaceCardSize;\n  /** Inner padding. Defaults to `lg` (24px). */\n  readonly padding?: SurfaceCardPadding;\n  /** Apply the dashboard system card shadow (`--shadow-dash-card`). Defaults to `true`. */\n  readonly elevated?: boolean;\n}"
+    },
+    "SwitchProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Switch.tsx",
+      "declaration": "export interface SwitchProps {\n  /** Controlled on/off state — the caller owns it; this component holds no state. */\n  readonly checked: boolean;\n  /** Called with the next boolean on activation (click or Enter/Space). Behavior is delegated. */\n  readonly onCheckedChange: (checked: boolean) => void;\n  /** Visible label text beside the toggle. Also drives the accessible name via `aria-label`. */\n  readonly label?: ReactNode;\n  /** Explicit accessible name for the switch, overriding the string `label`. Required when neither is a string. */\n  readonly ariaLabel?: string;\n  /** When `true`, the native `disabled` attr removes it from the tab order and blocks toggling. */\n  readonly disabled?: boolean;\n}"
+    },
+    "FinalCtaAvatar": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/T1FinalCTA.slice.ts",
+      "declaration": "export type FinalCtaAvatar = typeof FinalCtaAvatar.Type;"
+    },
+    "FinalCtaAction": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/T1FinalCTA.slice.ts",
+      "declaration": "export type FinalCtaAction = typeof FinalCtaAction.Type;"
+    },
+    "T1FinalCTASlice": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/T1FinalCTA.slice.ts",
+      "declaration": "export type T1FinalCTASlice = typeof T1FinalCTASlice.Type;"
+    },
+    "T1FinalCTAProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/T1FinalCTA.tsx",
+      "declaration": "export interface T1FinalCTAProps {\n  readonly slice: T1FinalCTASlice;\n  /** Invoked with the activated CTA so the host owns navigation (the section never embeds a route literal). */\n  readonly onAction?: (action: FinalCtaAction) => void;\n}"
+    },
+    "LifestyleCard": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/T1LifestyleCards.tsx",
+      "declaration": "export interface LifestyleCard {\n  /** Stable key for the card within the section (e.g. the profile id). */\n  readonly id: string;\n  /** Resolved photo URL of a real person (SL-2 `ContentBlock.ref` → media). */\n  readonly imageSrc: string;\n  /** Required alt text for the photo (a11y; never the empty string at the surface). */\n  readonly imageAlt: string;\n  /** Card title (H3 over the photo). */\n  readonly title: string;\n  /** Two-line description over the photo. */\n  readonly description: string;\n  /** CTA link label rendered with a trailing arrow. */\n  readonly ctaLabel: string;\n  /** CTA href (routing stays IR data — D4-neutral; no hostname baked in). */\n  readonly ctaHref: string;\n  /** Optional small uppercase tag rendered inside the card (e.g. \"EMPRENDEDOR\"). Allowed inside cards only — never above the  */\n  readonly tag?: string;\n}"
+    },
+    "LifestyleSectionSlice": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/T1LifestyleCards.tsx",
+      "declaration": "export interface LifestyleSectionSlice {\n  /** Section heading (H2). The accent span is carved out of it via {@link accent}. */\n  readonly heading: string;\n  /** Optional substring of {@link heading} to paint in the accent red. The accent span inherits the title weight (`LANDING.md */\n  readonly accent?: string;\n  /** Optional one-line description under the heading. */\n  readonly description?: string;\n  /** The profile cards, in IR-declared order. Renders exactly these — no more, no fewer. */\n  readonly cards: ReadonlyArray<LifestyleCard>;\n}"
+    },
+    "T1LifestyleCardsProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/T1LifestyleCards.tsx",
+      "declaration": "export interface T1LifestyleCardsProps {\n  /** The projected IR slice. All rendered content comes from here. */\n  readonly slice: LifestyleSectionSlice;\n}"
+    },
+    "TabItem": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Tabs.tsx",
+      "declaration": "export interface TabItem {\n  readonly id: string;\n  readonly label: ReactNode;\n  /** When present on ANY tab, the active tab's content renders in a `role=\"tabpanel\"` below the bar. */\n  readonly content?: ReactNode;\n}"
+    },
+    "TabsProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Tabs.tsx",
+      "declaration": "export interface TabsProps {\n  /** The tabs to render, in order. */\n  readonly tabs: readonly TabItem[];\n  /** Controlled active tab id — the caller owns it; this component holds no state. */\n  readonly activeId: string;\n  /** Called with the next tab id on click or keyboard navigation. Behavior is fully delegated. */\n  readonly onSelect: (id: string) => void;\n}"
+    },
+    "TagProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Tag.tsx",
+      "declaration": "export interface TagProps {\n  readonly children: ReactNode;\n  /** When provided, renders an accessible remove (`×`) control and calls this on activation. */\n  readonly onRemove?: () => void;\n  /** Selected chips use the brand-red register; the default is neutral gray. */\n  readonly selected?: boolean;\n  /** Accessible label for the remove control — localized by the caller (default `Quitar`). */\n  readonly removeLabel?: string;\n}"
+    },
+    "TextareaProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Textarea.tsx",
+      "declaration": "export interface TextareaProps {\n  /** Controlled value — the caller owns the text; this component holds no state. */\n  readonly value: string;\n  /** Called with the next raw string on every keystroke. Behavior is fully delegated. */\n  readonly onChange: (value: string) => void;\n  /** Visible label, associated to the control by `id`/`htmlFor`. Strongly recommended for an accessible name; when omitted, s */\n  readonly label?: ReactNode;\n  /** Explicit element id. Falls back to a slug of `label` so the `<label htmlFor>` stays wired. */\n  readonly id?: string;\n  readonly placeholder?: string;\n  /** Small helper/error text under the field; recolored to the error register when `state=\"error\"`. Wired to the field via `a */\n  readonly helper?: ReactNode;\n  /** Validation register. Defaults to `default`. */\n  readonly state?: InputState;\n  /** Visible row count (native `rows`). Defaults to `4`. */\n  readonly rows?: number;\n  /** When `true`, the native `disabled` attr removes it from the tab order and blocks input. */\n  readonly disabled?: boolean;\n  /** When `true`, the field shows its value but is not editable (native `readOnly`). */\n  readonly readOnly?: boolean;\n}"
+    },
+    "ToastSeverity": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Toast.tsx",
+      "declaration": "export type ToastSeverity = AlertVariant;"
+    },
+    "ToastAction": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Toast.tsx",
+      "declaration": "export interface ToastAction {\n  /** The button label — localized by the caller (user-facing copy). */\n  readonly label: string;\n  /** Invoked on activation; the toast dismisses itself immediately afterward. */\n  readonly onClick: () => void;\n}"
+    },
+    "ToastProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Toast.tsx",
+      "declaration": "export interface ToastProps {\n  /** The toast body — user-facing copy (localized by the caller). */\n  readonly message: ReactNode;\n  /** The semantic severity. Defaults to `info`. */\n  readonly severity?: ToastSeverity;\n  /** Optional bold title above the message (forwarded to `<Alert>`). */\n  readonly title?: ReactNode;\n  /** Optional call-to-action; its presence pins the toast open (no auto-dismiss). */\n  readonly action?: ToastAction;\n  /** Dismiss handler — wires the `×` control, `Escape`, and auto-dismiss. */\n  readonly onDismiss?: () => void;\n  /** Auto-dismiss override in ms. `undefined` ⇒ the severity/action default; a positive number ⇒ that timeout; `null`/`0`/neg */\n  readonly durationMs?: number | null;\n  /** Accessible label for the dismiss control — localized by the caller (default `Cerrar`). */\n  readonly dismissLabel?: string;\n  /** Optional leading icon element, tinted to the variant's border color (forwarded to `<Alert>`). */\n  readonly icon?: ReactNode;\n}"
+    },
+    "ToastOptions": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/ToastProvider.tsx",
+      "declaration": "export interface ToastOptions {\n  /** Optional call-to-action; its presence pins the toast open (no auto-dismiss). */\n  readonly action?: ToastAction;\n  /** Auto-dismiss override in ms (`undefined` ⇒ severity/action default; `null`/`<= 0` ⇒ persist). */\n  readonly durationMs?: number | null;\n  /** Optional bold title above the message. */\n  readonly title?: ReactNode;\n  /** Accessible label for the dismiss control (default `Cerrar`). */\n  readonly dismissLabel?: string;\n}"
+    },
+    "ToastApi": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/ToastProvider.tsx",
+      "declaration": "export interface ToastApi {\n  readonly error: EnqueueToast;\n  readonly warning: EnqueueToast;\n  readonly success: EnqueueToast;\n  readonly info: EnqueueToast;\n  /** Dismiss a toast by the `id` returned from an enqueue call. */\n  readonly dismiss: (id: string) => void;\n}"
+    },
+    "ToastProviderProps": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/ToastProvider.tsx",
+      "declaration": "export interface ToastProviderProps {\n  readonly children: ReactNode;\n  /** Max toasts visible at once; excess is dropped FIFO (oldest first). Defaults to 3. */\n  readonly maxVisible?: number;\n  /** Accessible label for the toast viewport region — localized by the caller (default `Notificaciones`). */\n  readonly label?: string;\n}"
+    },
+    "BannerOverlayColor": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Banner.tsx",
+      "declaration": "export type BannerOverlayColor = 'black' | 'white';",
+      "transitive": true
+    },
+    "BannerTextColorMode": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Banner.tsx",
+      "declaration": "export type BannerTextColorMode = 'auto' | 'light' | 'dark';",
+      "transitive": true
+    },
+    "BannerTitleSize": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Banner.tsx",
+      "declaration": "export type BannerTitleSize = 's' | 'm' | 'l' | 'xl';",
+      "transitive": true
+    },
+    "BannerTextSize": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Banner.tsx",
+      "declaration": "export type BannerTextSize = 's' | 'm' | 'l';",
+      "transitive": true
+    },
+    "BannerSpacing": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Banner.tsx",
+      "declaration": "export type BannerSpacing = 'none' | 'small' | 'medium' | 'large';",
+      "transitive": true
+    },
+    "BannerContainerWidth": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Banner.tsx",
+      "declaration": "export type BannerContainerWidth = '4xl' | '6xl' | '7xl' | 'full';",
+      "transitive": true
+    },
+    "BannerContentAlignment": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Banner.tsx",
+      "declaration": "export type BannerContentAlignment = 'auto' | 'left' | 'center' | 'right';",
+      "transitive": true
+    },
+    "BannerTextAlignment": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Banner.tsx",
+      "declaration": "export type BannerTextAlignment = 'left' | 'center' | 'right';",
+      "transitive": true
+    },
+    "BannerVerticalPosition": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Banner.tsx",
+      "declaration": "export type BannerVerticalPosition = 'top' | 'center' | 'bottom';",
+      "transitive": true
+    },
+    "BannerImagePosition": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/Banner.tsx",
+      "declaration": "export interface BannerImagePosition {\n  readonly x: number;\n  readonly y: number;\n}",
+      "transitive": true
+    },
+    "EnqueueToast": {
+      "declaredIn": "libs/shared/nexus/l3-nexus-react/src/ToastProvider.tsx",
+      "declaration": "type EnqueueToast = (message: ReactNode, options?: ToastOptions) => string;",
+      "transitive": true
+    }
+  }
+}

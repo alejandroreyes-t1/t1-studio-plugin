@@ -1,0 +1,380 @@
+{
+  "headSha": "21741ff471c1ab175ab5d9c5cd7cec0fe4dbc50d",
+  "generatedAt": "2026-09-09T01:24:53.135Z",
+  "results": [
+    {
+      "name": "Alert",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Alert.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "onClose: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "AnnouncementBar",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/AnnouncementBar.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "Avatar",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Avatar.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "Badge",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Badge.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "Banner",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Banner.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "BrowserMockup",
+      "namespace": "landing",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/landing/BrowserMockup.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "Button",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Button.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "onClick: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "Card",
+      "namespace": "landing",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/landing/Card.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "Checkbox",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Checkbox.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "onCheckedChange: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "Collage",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Collage.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "DataTable",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/DataTable.tsx",
+      "verdict": "ADAPTER_REQUIRED",
+      "reasons": [
+        "SCREENSPEC.md documents this adapter explicitly: `render` (a function) → `cell` (a Node or { \"$row\": field }); `rowKey` (a function over the generic row type T) → a field-name string the renderer turns back into a function. The generic <T> in `columns`/`rows` is resolved per-screen through the row data itself, not through this adapter."
+      ]
+    },
+    {
+      "name": "Dialog",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Dialog.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "onClose: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "EmptyState",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/EmptyState.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "FallbackImage",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/FallbackImage.tsx",
+      "verdict": "ADAPTER_REQUIRED",
+      "reasons": [
+        "style: type includes CSSProperties — SCREENSPEC.md's Box is the only styling escape hatch (a fixed, non-CSS vocabulary); an arbitrary style bag has no serialization rule (optional — a screen can omit it)."
+      ]
+    },
+    {
+      "name": "FloatingBadge",
+      "namespace": "landing",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/landing/FloatingBadge.tsx",
+      "verdict": "ADAPTER_REQUIRED",
+      "reasons": [
+        "position: type includes CSSProperties — SCREENSPEC.md's Box is the only styling escape hatch (a fixed, non-CSS vocabulary); an arbitrary style bag has no serialization rule (optional — a screen can omit it)."
+      ]
+    },
+    {
+      "name": "Footer",
+      "namespace": "landing",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/landing/Footer.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "GlowBlob",
+      "namespace": "landing",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/landing/GlowBlob.tsx",
+      "verdict": "ADAPTER_REQUIRED",
+      "reasons": [
+        "position: type includes CSSProperties — SCREENSPEC.md's Box is the only styling escape hatch (a fixed, non-CSS vocabulary); an arbitrary style bag has no serialization rule (optional — a screen can omit it)."
+      ]
+    },
+    {
+      "name": "Header",
+      "namespace": "landing",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/landing/Header.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "Hero",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Hero.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "onCta: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "Icon",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Icon.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "IconButton",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/IconButton.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "onClick: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "ImageWithText",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/ImageWithText.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "onCta: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "Input",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Input.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "onChange: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "LandingButton",
+      "namespace": "landing",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/landing/LandingButton.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "onClick: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "LogosMarquee",
+      "namespace": "landing",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/landing/LogosMarquee.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "PageHeader",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/PageHeader.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "Pagination",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Pagination.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "hrefForPage: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op).",
+        "onPageChange: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "PhoneMockup",
+      "namespace": "landing",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/landing/PhoneMockup.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "RichText",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/RichText.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "RowActionsMenu",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/RowActionsMenu.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "SectionStack",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/SectionStack.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "SectionWrapper",
+      "namespace": "landing",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/landing/SectionWrapper.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "Select",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Select.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "onChange: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "SurfaceCard",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/SurfaceCard.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "Switch",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Switch.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "onCheckedChange: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "T1FinalCTA",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/T1FinalCTA.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "onAction: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "T1LifestyleCards",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/T1LifestyleCards.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    },
+    {
+      "name": "Tabs",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Tabs.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "onSelect: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "Tag",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Tag.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "onRemove: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "Textarea",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Textarea.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "onChange: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "Toast",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/Toast.tsx",
+      "verdict": "REVIEW",
+      "reasons": [
+        "Toast's primary real usage is imperative — a descendant calls the `useToast()` hook (`toast.success(msg)`) returned by ToastProvider's context, not a prop on a tree node. A static ScreenSpec tree can represent a toast already visible on load (Toast's own props are plain and serializable) but cannot represent the runtime trigger — needs a product decision on whether that's an acceptable ScreenSpec fiction or a real gap (candidate Escape)."
+      ]
+    },
+    {
+      "name": "ToastProvider",
+      "namespace": "root",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/ToastProvider.tsx",
+      "verdict": "REVIEW",
+      "reasons": [
+        "ToastProvider's primary real usage is imperative — a descendant calls the `useToast()` hook (`toast.success(msg)`) returned by ToastProvider's context, not a prop on a tree node. A static ScreenSpec tree can represent a toast already visible on load (Toast's own props are plain and serializable) but cannot represent the runtime trigger — needs a product decision on whether that's an acceptable ScreenSpec fiction or a real gap (candidate Escape)."
+      ]
+    },
+    {
+      "name": "chatKit.Accordion",
+      "namespace": "chatKit",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/chat-kit/Accordion.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": [
+        "onOpenChange: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op)."
+      ]
+    },
+    {
+      "name": "chatKit.Card",
+      "namespace": "chatKit",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/chat-kit/Card.tsx",
+      "verdict": "ADAPTER_REQUIRED",
+      "reasons": [
+        "onClick: function type — representable via { \"$act\": \"id\" } (SCREENSPEC.md §Value; the POC renderer treats it as a no-op).",
+        "style: type includes CSSProperties — SCREENSPEC.md's Box is the only styling escape hatch (a fixed, non-CSS vocabulary); an arbitrary style bag has no serialization rule (optional — a screen can omit it)."
+      ]
+    },
+    {
+      "name": "chatKit.ContentArea",
+      "namespace": "chatKit",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/chat-kit/ContentArea.tsx",
+      "verdict": "ADAPTER_REQUIRED",
+      "reasons": [
+        "style: type includes CSSProperties — SCREENSPEC.md's Box is the only styling escape hatch (a fixed, non-CSS vocabulary); an arbitrary style bag has no serialization rule (optional — a screen can omit it)."
+      ]
+    },
+    {
+      "name": "chatKit.StatusPill",
+      "namespace": "chatKit",
+      "sourcePath": "libs/shared/nexus/l3-nexus-react/src/chat-kit/StatusPill.tsx",
+      "verdict": "SUPPORTED",
+      "reasons": []
+    }
+  ]
+}

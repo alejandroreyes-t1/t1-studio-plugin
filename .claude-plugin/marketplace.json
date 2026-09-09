@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "t1-studio-plugin",
+  "owner": {
+    "name": "Alejandro Mauricio Reyes Delgado",
+    "email": "ux@t1pagos.com"
+  },
+  "description": "Marketplace de plugins de Claude Code para el equipo de producto de T1. Hoy: T1 Studio (generación de pantallas Nexus para POs).",
+  "metadata": {
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "studio",
+      "source": "./plugins/studio",
+      "description": "T1 Studio — un PO describe una pantalla en lenguaje natural y recibe un ScreenSpec validado contra el manifiesto real de Nexus, con crítica de diseño y reporte de handoff.",
+      "category": "design",
+      "keywords": ["design", "product", "nexus", "screenspec"]
+    }
+  ]
+}

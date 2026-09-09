@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "studio",
+  "displayName": "T1 Studio",
+  "version": "0.1.0",
+  "description": "Deja que un Product Owner describa una necesidad de producto en lenguaje natural y reciba una pantalla real compuesta solo con componentes Nexus, itere charlando, pida una crítica de diseño y cierre con un reporte de handoff. Empaqueta el manifiesto de Nexus, el criterio UX de T1, el validador mecánico y el editor — nadie necesita clonar el proyecto del kit.",
+  "author": {
+    "name": "Alejandro Mauricio Reyes Delgado",
+    "email": "ux@t1pagos.com"
+  },
+  "license": "UNLICENSED",
+  "keywords": ["t1", "studio", "nexus", "design-system", "product-owner", "screenspec"]
+}

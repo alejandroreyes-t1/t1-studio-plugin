@@ -1,0 +1,22 @@
+{
+  "mode": "read-only-verified",
+  "monorepo": "PlataformaT1/Phoenix (GitHub, branch main) — read via REST API only, no local clone. See nexus-contract/report.md §Methodology.",
+  "headSha": "21741ff471c1ab175ab5d9c5cd7cec0fe4dbc50d",
+  "publicComponents": 46,
+  "manifestComponents": 32,
+  "generatedManifestComponents": 46,
+  "supported": 38,
+  "adapterRequired": 6,
+  "unsupported": 0,
+  "review": 2,
+  "manifestDiffCount": 0,
+  "pocRegressions": [],
+  "reliableForConstruction": "manifest.generated.json",
+  "generatedAt": "2026-09-09T01:24:53.136Z",
+  "status": "healthy",
+  "statusMeaning": {
+    "healthy": "manifest.generated.json matches nexus-manifest.json on every shared component (0 prop/type/union diffs) and the unmodified validar.mjs still passes every POC screen against it — safe to build new screens from manifest.generated.json (superset: 46 components vs 32).",
+    "warning": "either a POC screen regressed against manifest.generated.json, or the diff surfaced a probable extractor bug — /studio should fall back to nexus-manifest.json (32 components, hand-verified) until a human reviews nexus-contract/report.md.",
+    "stale": "the mirror under scripts/nexus-contract/.mirror predates a monorepo change and has not been refreshed — re-run `node fetch-mirror.mjs && node run-audit.mjs` before trusting these numbers."
+  }
+}
