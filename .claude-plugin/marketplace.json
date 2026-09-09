@@ -13,9 +13,9 @@
     {
       "name": "studio",
       "source": "./plugins/studio",
-      "description": "T1 Studio — un PO describe una pantalla en lenguaje natural y recibe un ScreenSpec validado contra el manifiesto real de Nexus, con crítica de diseño y reporte de handoff.",
+      "description": "T1 Studio — un PO convierte una idea difusa o un documento de definición maduro en un prototipo React interactivo real (localhost, navegable), compuesto y validado contra el manifiesto real de Nexus, con crítica de diseño y handoff trazable.",
       "category": "design",
-      "keywords": ["design", "product", "nexus", "screenspec"]
+      "keywords": ["design", "product", "nexus", "screenspec", "prototype"]
     }
   ]
 }
